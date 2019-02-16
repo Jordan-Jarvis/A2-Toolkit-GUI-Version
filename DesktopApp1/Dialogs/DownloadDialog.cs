@@ -8,19 +8,19 @@ using System.Windows.Forms;
 
 namespace DesktopApp1
 {
-    public partial class Form2 : Form
+    public partial class DownloadDialog : Form
     {
         EventArgs e;
         object sender;
         string downloadLink;
         int canceled;
-        public Form2(string downloadVersion)
+        public DownloadDialog(string downloadVersion)
         {
              downloadLink = downloadVersion;
             InitializeComponent();
             label1_Click(sender, e);
         }
-        ~Form2() { }
+        ~DownloadDialog() { }
 
         WebClient client;
 

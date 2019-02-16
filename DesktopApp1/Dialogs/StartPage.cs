@@ -9,11 +9,11 @@ using System.Windows.Forms;
 using System.Xml;
 namespace DesktopApp1
 {
-    public partial class Form1 : Form
+    public partial class StartPage : Form
     {
         int hasSelectedSoftwareVersion = 0;
         public string downloadVersion;
-        public Form1()
+        public StartPage()
         {
             InitializeComponent();
             XMLReader xmlList = new XMLReader("./files/convertjson.xml");
@@ -451,7 +451,7 @@ namespace DesktopApp1
                 MessageBox.Show("Please select a version");
                 return;
             };
-            Form2 f2 = new Form2(downloadVersion);
+            DownloadDialog f2 = new DownloadDialog(downloadVersion);
             f2.ShowDialog();
             
 

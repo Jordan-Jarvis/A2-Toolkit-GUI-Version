@@ -1,6 +1,6 @@
 ﻿namespace DesktopApp1
 {
-    partial class Form2
+    partial class DownloadDialog
     {
         /// <summary>
         /// Required designer variable.

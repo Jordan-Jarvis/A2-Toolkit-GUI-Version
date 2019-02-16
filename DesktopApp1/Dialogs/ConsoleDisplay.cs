@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace DesktopApp1
 {
-    public partial class Form3 : Form
+    public partial class ConsoleDisplay : Form
     {
-        public Form3()
+        public ConsoleDisplay()
         {
             InitializeComponent();
         }
