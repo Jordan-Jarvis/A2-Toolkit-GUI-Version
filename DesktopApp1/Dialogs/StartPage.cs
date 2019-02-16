@@ -1,3 +1,4 @@
+using DesktopApp1.subroutines.adb;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,10 +14,15 @@ namespace DesktopApp1
     {
         int hasSelectedSoftwareVersion = 0;
         public string downloadVersion;
+        private runExternalProcesses run;
+
+        internal runExternalProcesses Run { get => run; set => run = value; }
+
         public StartPage()
         {
             InitializeComponent();
-            XMLReader xmlList = new XMLReader("./files/convertjson.xml");
+            Run = new runExternalProcesses(this);
+            XMLReader xmlList = new XMLReader("./A2Versions.xml");
             List<VersionInfo> versions = xmlList.getList();
             int i = 0;
             foreach (VersionInfo versionInfo in versions)
@@ -35,24 +41,7 @@ namespace DesktopApp1
 
 
 
-        private async System.Threading.Tasks.Task<string> cmdAsync(string command)
-        {
-            string currentOutput;
-           
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-            startInfo.UseShellExecute = false;
-            startInfo.RedirectStandardOutput = true;
-            startInfo.FileName = "cmd.exe";
-            startInfo.Arguments = "@ /c " + command;
-            //startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            process.StartInfo = startInfo;
-            process.Start();
-            string output = process.StandardOutput.ReadToEnd();
-            currentOutput = await process.StandardOutput.ReadLineAsync();
-            process.WaitForExit();
-            return output;
-        }
+        
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -70,120 +59,52 @@ namespace DesktopApp1
         private void button2_Click(object sender, EventArgs e)
         {
 
-            string isDevice = fastboot("devices");
+            string isDevice = Run.fastboot("devices");
             if (string.IsNullOrEmpty(isDevice) || string.IsNullOrWhiteSpace(isDevice))
             {
-                adb("reboot");
+                Run.adb("reboot");
             }
             else
             {
-                fastboot("reboot");
+                Run.fastboot("reboot");
             }
         }
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            adb("reboot bootloader");
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-            startInfo.UseShellExecute = false;
-            startInfo.RedirectStandardOutput = true;
-            startInfo.FileName = "fastboot_edl.exe";
-            startInfo.Arguments = "reboot-edl";
-            process.StartInfo = startInfo;
-            process.Start();
-            string output = process.StandardOutput.ReadToEnd();
-            process.WaitForExit();
-            //return output;
+
         }
 
 
         private void button3_Click(object sender, EventArgs e)
         {
-            adb("reboot bootloader");
+            Run.adb("reboot bootloader");
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            fastboot("reboot");
+            Run.fastboot("reboot");
         }
 
-        private void autoFastboot()
-        {
-            string isDevice = fastboot("devices");
-            if (string.IsNullOrEmpty(isDevice) || string.IsNullOrWhiteSpace(isDevice))
-            {
-                string devices = adb("devices -l");
-                if (devices.Contains("jasmine"))
-                {
-                    adb("reboot bootloader");
-                }
-                else
-                {
-                    MessageBox.Show("No devices found. Please ensure it is plugged in and the proper drivers are installed.");
-                }
-            }
-            else
-            {
-                return;
-            }
-        }
-    public string adb(string command)
-        {
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-            startInfo.UseShellExecute = false;
-            startInfo.RedirectStandardError = true;
-            startInfo.RedirectStandardOutput = true;
-            startInfo.FileName = "./adb/adb.exe";
-            startInfo.Arguments = command;
-            //startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            process.StartInfo = startInfo;
-            process.Start();
-            string output = process.StandardOutput.ReadToEnd();
-            output += process.StandardError.ReadToEnd();
-            //MessageBox.Show(output);
-            process.WaitForExit();
-            return output;
-        }
-
-        public string fastboot(string command)
-        {
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-            startInfo.UseShellExecute = false;
-            startInfo.RedirectStandardError = true;
-            startInfo.RedirectStandardOutput = true;
-            startInfo.FileName = "./adb/fastboot.exe";
-            startInfo.Arguments = command;
-            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            //MessageBox.Show(command);
-            process.StartInfo = startInfo;
-            process.Start();
-            string output = process.StandardOutput.ReadToEnd();
-            output += process.StandardError.ReadToEnd();
-            //MessageBox.Show(output);
-            process.WaitForExit();
-            return output;
-        }
+        
 
 
         private void unlockFlashing_Click(object sender, EventArgs e)
         {
-            autoFastboot();
-            fastboot("flashing unlock");
+            Run.autoFastboot();
+            Run.fastboot("flashing unlock");
         }
 
         private void unlockOEM_Click(object sender, EventArgs e)
         {
-            autoFastboot();
-            fastboot("oem unlock");
+            Run.autoFastboot();
+            Run.fastboot("oem unlock");
         }
 
         private void unlockCritical_Click(object sender, EventArgs e)
         {
-            autoFastboot();
-            fastboot("flashing unlock_critical");
+            Run.autoFastboot();
+            Run.fastboot("flashing unlock_critical");
         }
 
         private void browse_Click(object sender, EventArgs e)
@@ -212,7 +133,7 @@ namespace DesktopApp1
         {
             string output;
             MessageBox.Show($"flash {currentPartition} {filePath}");
-                output = fastboot("flash {currentPartition} {filePath}");
+                output = Run.fastboot("flash {currentPartition} {filePath}");
             if (output.Contains("error"))
             {
                 return false;
@@ -240,11 +161,11 @@ namespace DesktopApp1
                 return;
             }
 
-            if (checkExist(textBox1.Text, ".img") == false)
+            if (Run.checkExist(textBox1.Text, ".img") == false)
             {
                 return;
             }
-            autoFastboot();
+            Run.autoFastboot();
             //string currentPartition;
             for (int i = 0; i < partitions.Count; i++)
             {
@@ -277,25 +198,7 @@ namespace DesktopApp1
 
         }
 
-        private bool checkExist(string location, string extension)
-        {
-
-
-            if (File.Exists(location))
-            {
-                if (Path.GetExtension(location) != extension)
-                {
-                    MessageBox.Show($"The file selected is not a flashable image. Please select a flashable {extension} file.");
-                    return false;
-                }
-            }
-            else
-            {
-                MessageBox.Show("The file chosen could not be found!");
-                return false;
-            }
-            return true;
-        }
+        
         private void groupBox4_Enter(object sender, EventArgs e)
         {
             
@@ -314,15 +217,16 @@ namespace DesktopApp1
         private void button3_Click_1(object sender, EventArgs e)
         {
             // Launches TWRP
-            if (checkExist(textBox2.Text, ".img") == false)
+            runExternalProcesses P = new runExternalProcesses(this);
+            if (Run.checkExist(textBox2.Text, ".img") == false)
             {
                 return;
             }
             
 
-            autoFastboot();
+            Run.autoFastboot();
             string test;
-            test = fastboot($"boot \"{textBox2.Text}\"");
+            test = Run.fastboot($"boot \"{textBox2.Text}\"");
             MessageBox.Show(test);
         }
 
@@ -336,7 +240,7 @@ namespace DesktopApp1
             
         }
 
-        private void textBox3_TextChanged(object sender, EventArgs e)
+        public void textBox3_TextChanged(object sender, EventArgs e)
         {
 
         }
@@ -350,49 +254,7 @@ namespace DesktopApp1
 
         private void button2_Click_1(object sender, EventArgs e)
         {
-            if (checkExist(textBox3.Text, ".zip") == false)
-            {
-                return;
-            }
-            autoFastboot();
-            fastboot($"boot \"{textBox3.Text}\"");
-            if (checkExist(textBox4.Text, ".img") == false)
-            {
-                return;
-            }
-            //autoFastboot();
-           // fastboot($"boot {textBox3.Text}");
-
-            string message = $"Booting TWRP, Once it starts please unlock and select Advanced>Sideload then swipe to start sideload and click OK";
-            string caption = "Instructions";
-            MessageBoxButtons buttons = MessageBoxButtons.OKCancel;
-            DialogResult result = new DialogResult();
-            if (result == DialogResult.Cancel)
-            {
-                return;
-            }
-            string zipResult = "failed";
-            while (zipResult.Contains("failed") || zipResult.Length > 5)
-            {
-                
-                System.Threading.Thread.Sleep(15000);
-                zipResult = adb($"sideload \"{textBox3.Text}\"");
-                Console.WriteLine(zipResult);
-                if (zipResult.Contains("error"))
-                {
-                    message = $"An error has ocurred. Would you like to see the ADB output?";
-                    caption = "Instructions";
-                    buttons = MessageBoxButtons.YesNo;
-                    DialogResult results = new DialogResult();
-                    if (results == DialogResult.Yes)
-                    {
-                        MessageBox.Show(zipResult);
-                    }
-                    return;
-                }
-            }
-            MessageBox.Show(zipResult);
-            return;
+            Run.InstallZip();
 
         }
 
@@ -469,7 +331,7 @@ namespace DesktopApp1
             for (int i = 0; i < numItems; i++)
             {
                 string est = @"flash " + commands[i , 1] + " " + fileLocation + "\\" + commands[i, 0];
-                string exitCode = fastboot(est);
+                string exitCode = Run.fastboot(est);
                 if (exitCode.Contains("error"))
                 {
                     string message = $"An error has ocurred. Would you like to see the ADB output?";

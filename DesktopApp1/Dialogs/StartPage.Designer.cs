@@ -5,7 +5,7 @@ namespace DesktopApp1
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        public System.ComponentModel.IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -26,7 +26,7 @@ namespace DesktopApp1
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent()
+        public void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StartPage));
             this.reboot = new System.Windows.Forms.Button();
@@ -440,38 +440,38 @@ namespace DesktopApp1
         }
 
         #endregion
-        private System.Windows.Forms.Button reboot;
-        private System.Windows.Forms.Button rebootEDL;
-        private System.Windows.Forms.Button enterFastboot;
-        private System.Windows.Forms.Button exitFastboot;
-        private System.Windows.Forms.Button unlockOEM;
-        private System.Windows.Forms.Button unlockFlashing;
-        private System.Windows.Forms.Button unlockCritical;
-        private System.Windows.Forms.Button browse;
-        private System.Windows.Forms.OpenFileDialog openFileDialog1;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.CheckedListBox checkedListBox1;
-        private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button browseTwrp;
-        private System.Windows.Forms.GroupBox groupBox5;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button button6;
-        private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.Button button7;
+        public System.Windows.Forms.Button reboot;
+        public System.Windows.Forms.Button rebootEDL;
+        public System.Windows.Forms.Button enterFastboot;
+        public System.Windows.Forms.Button exitFastboot;
+        public System.Windows.Forms.Button unlockOEM;
+        public System.Windows.Forms.Button unlockFlashing;
+        public System.Windows.Forms.Button unlockCritical;
+        public System.Windows.Forms.Button browse;
+        public System.Windows.Forms.OpenFileDialog openFileDialog1;
+        public System.Windows.Forms.TextBox textBox1;
+        public System.Windows.Forms.Label label1;
+        public System.Windows.Forms.GroupBox groupBox1;
+        public System.Windows.Forms.GroupBox groupBox2;
+        public System.Windows.Forms.GroupBox groupBox3;
+        public System.Windows.Forms.Button button1;
+        public System.Windows.Forms.CheckedListBox checkedListBox1;
+        public System.Windows.Forms.GroupBox groupBox4;
+        public System.Windows.Forms.TextBox textBox2;
+        public System.Windows.Forms.Button button3;
+        public System.Windows.Forms.Button browseTwrp;
+        public System.Windows.Forms.GroupBox groupBox5;
+        public System.Windows.Forms.TextBox textBox3;
+        public System.Windows.Forms.Button button2;
+        public System.Windows.Forms.Button button4;
+        public System.Windows.Forms.TextBox textBox4;
+        public System.Windows.Forms.Button button5;
+        public System.Windows.Forms.CheckBox checkBox1;
+        public System.Windows.Forms.Label label3;
+        public System.Windows.Forms.Label label2;
+        public System.Windows.Forms.Button button6;
+        public System.Windows.Forms.ComboBox comboBox1;
+        public System.Windows.Forms.Button button7;
     }
 }
 

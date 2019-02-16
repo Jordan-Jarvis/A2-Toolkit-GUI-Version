@@ -67,6 +67,7 @@
     <Compile Include="Dialogs\ConsoleDisplay.Designer.cs">
       <DependentUpon>ConsoleDisplay.cs</DependentUpon>
     </Compile>
+    <Compile Include="subroutines\adb\runExternalProcesses.cs" />
     <Compile Include="subroutines\ExternalInteractions\getCommands.cs" />
     <Compile Include="subroutines\Version Object.cs" />
     <Compile Include="subroutines\ExternalInteractions\XMLInteractions\XMLReader.cs" />
@@ -133,7 +134,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="A2Versions.xml" />
+    <Content Include="A2Versions.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="subroutines\6XSpecific\" />
