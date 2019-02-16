@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
+using System.Diagnostics;
+using System.IO;
 using System.Net;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DesktopApp1
@@ -24,6 +20,7 @@ namespace DesktopApp1
             InitializeComponent();
             label1_Click(sender, e);
         }
+        ~Form2() { }
 
         WebClient client;
 
@@ -35,16 +32,40 @@ namespace DesktopApp1
                 Thread thread = new Thread(() =>
                 {
                     Uri uri = new Uri(url);
-                    string fileLocation = System.IO.Path.GetDirectoryName(Application.ExecutablePath);
+                    string pathString = Directory.GetCurrentDirectory() + "\\temp\\";
+                    Directory.CreateDirectory(pathString);
+                    MessageBox.Show(pathString);
+                    //string fileLocation = System.IO.Path.GetDirectoryName(Application.ExecutablePath);
                     string fileName = "test.tgz";
-                    MessageBox.Show(fileLocation + fileName);
+                    MessageBox.Show(pathString + fileName);
                     //string fileName = System.IO.Path.GetFileName(uri.AbsolutePath);
-                    client.DownloadFileAsync(uri, fileLocation + fileName);
+                    client.DownloadFileAsync(uri, pathString + "\\" + fileName);
+
            
                 });
                 thread.Start();
             }
+            //ExtractFile
         }
+
+        public void ExtractFile(string sourceArchive, string destination)
+        {
+            string zPath = "7za.exe"; //add to proj and set CopyToOuputDir
+            try
+            {
+                ProcessStartInfo pro = new ProcessStartInfo();
+                pro.WindowStyle = ProcessWindowStyle.Hidden;
+                pro.FileName = zPath;
+                pro.Arguments = string.Format("x \"{0}\" -y -o\"{1}\"", sourceArchive, destination);
+                Process x = Process.Start(pro);
+                x.WaitForExit();
+            }
+            catch (System.Exception Ex)
+            {
+                //handle error
+            }
+        }
+
 
         private void progressBar1_Click(object sender, EventArgs e)
         {
@@ -69,7 +90,10 @@ namespace DesktopApp1
             {
                 MessageBox.Show("download complete!!!");
             }
-            this.Close();
+
+            Invoke(new MethodInvoker(delegate { Close(); }));
+            //try { this.Close(); }
+            //catch { return; }
         }
 
         private void Client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)

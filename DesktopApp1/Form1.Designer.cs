@@ -46,18 +46,21 @@ namespace DesktopApp1
             this.button1 = new System.Windows.Forms.Button();
             this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.browseTwrp = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
             this.textBox2 = new System.Windows.Forms.TextBox();
+            this.button3 = new System.Windows.Forms.Button();
+            this.browseTwrp = new System.Windows.Forms.Button();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.button5 = new System.Windows.Forms.Button();
+            this.textBox4 = new System.Windows.Forms.TextBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.button2 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.button5 = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.button6 = new System.Windows.Forms.Button();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.button7 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -161,12 +164,12 @@ namespace DesktopApp1
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(27, 9);
+            this.label1.Location = new System.Drawing.Point(12, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(572, 13);
+            this.label1.Size = new System.Drawing.Size(617, 13);
             this.label1.TabIndex = 12;
-            this.label1.Text = "Welcome, This toolkit \\n is designed for the Mi A2. Please do not use this progra" +
-    "m if you don\'t know what you are doing.";
+            this.label1.Text = "Welcome, This toolkit is designed for the Mi A2. I am not responsible for any dam" +
+    "age caused to your device by using this program ";
             // 
             // groupBox1
             // 
@@ -247,15 +250,13 @@ namespace DesktopApp1
             this.groupBox4.Text = "Start TWRP image";
             this.groupBox4.Enter += new System.EventHandler(this.groupBox4_Enter);
             // 
-            // browseTwrp
+            // textBox2
             // 
-            this.browseTwrp.Location = new System.Drawing.Point(191, 105);
-            this.browseTwrp.Name = "browseTwrp";
-            this.browseTwrp.Size = new System.Drawing.Size(75, 23);
-            this.browseTwrp.TabIndex = 0;
-            this.browseTwrp.Text = "Browse...";
-            this.browseTwrp.UseVisualStyleBackColor = true;
-            this.browseTwrp.Click += new System.EventHandler(this.browseTwrp_Click);
+            this.textBox2.Location = new System.Drawing.Point(21, 134);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(254, 20);
+            this.textBox2.TabIndex = 3;
+            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
             // 
             // button3
             // 
@@ -267,13 +268,15 @@ namespace DesktopApp1
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click_1);
             // 
-            // textBox2
+            // browseTwrp
             // 
-            this.textBox2.Location = new System.Drawing.Point(21, 134);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(254, 20);
-            this.textBox2.TabIndex = 3;
-            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
+            this.browseTwrp.Location = new System.Drawing.Point(191, 105);
+            this.browseTwrp.Name = "browseTwrp";
+            this.browseTwrp.Size = new System.Drawing.Size(75, 23);
+            this.browseTwrp.TabIndex = 0;
+            this.browseTwrp.Text = "Browse...";
+            this.browseTwrp.UseVisualStyleBackColor = true;
+            this.browseTwrp.Click += new System.EventHandler(this.browseTwrp_Click);
             // 
             // groupBox5
             // 
@@ -292,6 +295,55 @@ namespace DesktopApp1
             this.groupBox5.TabIndex = 18;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Install Zip File";
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(15, 41);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(170, 17);
+            this.checkBox1.TabIndex = 8;
+            this.checkBox1.Text = "I already have TWRP installed";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(12, 108);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(116, 13);
+            this.label3.TabIndex = 7;
+            this.label3.Text = "Select a file to sideload";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(12, 61);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(101, 13);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "Select a TWRP img";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(191, 48);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(75, 23);
+            this.button5.TabIndex = 5;
+            this.button5.Text = "Browse...";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
+            // textBox4
+            // 
+            this.textBox4.Location = new System.Drawing.Point(15, 77);
+            this.textBox4.Name = "textBox4";
+            this.textBox4.Size = new System.Drawing.Size(254, 20);
+            this.textBox4.TabIndex = 4;
+            this.textBox4.Text = "TWRP File Here";
+            this.textBox4.TextChanged += new System.EventHandler(this.textBox4_TextChanged);
             // 
             // textBox3
             // 
@@ -322,61 +374,45 @@ namespace DesktopApp1
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click_1);
             // 
-            // textBox4
+            // button6
             // 
-            this.textBox4.Location = new System.Drawing.Point(15, 77);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(254, 20);
-            this.textBox4.TabIndex = 4;
-            this.textBox4.Text = "TWRP File Here";
-            this.textBox4.TextChanged += new System.EventHandler(this.textBox4_TextChanged);
+            this.button6.Location = new System.Drawing.Point(344, 401);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(75, 23);
+            this.button6.TabIndex = 20;
+            this.button6.Text = "Download";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
-            // button5
+            // comboBox1
             // 
-            this.button5.Location = new System.Drawing.Point(191, 48);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(75, 23);
-            this.button5.TabIndex = 5;
-            this.button5.Text = "Browse...";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(344, 430);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(217, 21);
+            this.comboBox1.TabIndex = 21;
+            this.comboBox1.Text = "Select Version";
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
-            // label2
+            // button7
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 61);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(101, 13);
-            this.label2.TabIndex = 6;
-            this.label2.Text = "Select a TWRP img";
-            this.label2.Click += new System.EventHandler(this.label2_Click);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 108);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(116, 13);
-            this.label3.TabIndex = 7;
-            this.label3.Text = "Select a file to sideload";
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(15, 41);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(170, 17);
-            this.checkBox1.TabIndex = 8;
-            this.checkBox1.Text = "I already have TWRP installed";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.button7.Location = new System.Drawing.Point(496, 401);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(75, 23);
+            this.button7.TabIndex = 22;
+            this.button7.Text = "Flash";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(630, 407);
+            this.ClientSize = new System.Drawing.Size(665, 506);
+            this.Controls.Add(this.button7);
+            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.button6);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
@@ -433,6 +469,9 @@ namespace DesktopApp1
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Button button7;
     }
 }
 

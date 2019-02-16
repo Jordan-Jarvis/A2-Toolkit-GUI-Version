@@ -1,0 +1,42 @@
+[
+    {
+        "Link": "http://bigota.d.miui.com/V9.6.17.0.ODIMIFE/jasmine_global_images_V9.6.17.0.ODIMIFE_20181108.0000.00_8.1_1c60295d1c.tgz",
+        "ReleaseDate": "December, 2018",
+        "Version": "V9.6.17.0.ODIMIFE"
+    },
+    {
+        "Link": "http://bigota.d.miui.com/V9.6.16.0.ODIMIFE/jasmine_global_images_V9.6.16.0.ODIMIFE_20181030.0000.00_8.1_5e098a2c1a.tgz",
+        "ReleaseDate": "November, 2018",
+        "Version": "V9.6.16.0.ODIMIFE"
+    },
+    {
+        "Link": "http://bigota.d.miui.com/V9.6.14.0.ODIMIFE/jasmine_global_images_V9.6.14.0.ODIMIFE_20181010.0000.00_8.1_94929604f8.tgz",
+        "ReleaseDate": "October, 2018",
+        "Version": "V9.6.14.0.ODIMIFE"
+    },
+    {
+        "Link": "http://bigota.d.miui.com/V9.6.13.0.ODIMIFE/jasmine_global_images_V9.6.13.0.ODIMIFE_20180913.0000.00_8.1_fbd1120565.tgz",
+        "ReleaseDate": "September, 2018",
+        "Version": "V9.6.13.0.ODIMIFE"
+    },
+    {
+        "Link": "http://bigota.d.miui.com/V9.6.10.0.ODIMIFE/jasmine_global_images_V9.6.10.0.ODIMIFE_20180731.0000.00_8.1_2aeda83301.tgz",
+        "ReleaseDate": "August, 2018",
+        "Version": "V9.6.10.0.ODIMIFE"
+    },
+    {
+        "Link": "http://bigota.d.miui.com/V9.6.9.0.ODIMIFE/jasmine_global_images_V9.6.9.0.ODIMIFE_20180723.0000.00_8.1_53f18f370a.tgz",
+        "ReleaseDate": "",
+        "Version": "V9.6.9.0.ODIMIFE"
+    },
+    {
+        "Link": "https://android.googleapis.com/packages/ota-api/xiaomi_jasminesprout_jasmine/f6a8b19f7f49286e0f1ecc9a8e714e8ba3ec4d92.zip",
+        "ReleaseDate": "",
+        "Version": "V9.6.5.0.ODIMIFE"
+    },
+    {
+        "Link": "http://bigota.d.miui.com/V10.0.2.0.PDIMIFJ/jasmine_global_images_V10.0.2.0.PDIMIFJ_20181206.0000.00_9.0_02b8deeb6d.tgz",
+        "ReleaseDate": "January, 2019",
+        "Version": "V10.0.2.0.PDIMIFJ (limited rollout) Pie"
+    }
+]

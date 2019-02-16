@@ -1,23 +1,57 @@
 using System;
-using System.IO;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
+using System.IO;
+using System.Threading;
 using System.Windows.Forms;
-
+using System.Xml;
 namespace DesktopApp1
 {
     public partial class Form1 : Form
     {
         int hasSelectedSoftwareVersion = 0;
-        string downloadVersion;
+        public string downloadVersion;
         public Form1()
         {
             InitializeComponent();
+            XMLReader xmlList = new XMLReader("./files/convertjson.xml");
+            List<VersionInfo> versions = xmlList.getList();
+            int i = 0;
+            foreach (VersionInfo versionInfo in versions)
+            {
+                comboBox1.DisplayMember = "version";
+                comboBox1.ValueMember = "link";
+                var item1 = new MyType { version = versionInfo.getVersion(), link = versionInfo.getLink() };
+                comboBox1.Items.Add(item1);
+                comboBox1.SelectedIndex = i;
+                i++;
+            }
+            comboBox1.SelectedIndex = 0;
+
+            comboBox1.Sorted = true;
+        }
+
+
+
+        private async System.Threading.Tasks.Task<string> cmdAsync(string command)
+        {
+            string currentOutput;
+           
+            System.Diagnostics.Process process = new System.Diagnostics.Process();
+            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+            startInfo.UseShellExecute = false;
+            startInfo.RedirectStandardOutput = true;
+            startInfo.FileName = "cmd.exe";
+            startInfo.Arguments = "@ /c " + command;
+            //startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            process.StartInfo = startInfo;
+            process.Start();
+            string output = process.StandardOutput.ReadToEnd();
+            currentOutput = await process.StandardOutput.ReadLineAsync();
+            process.WaitForExit();
+            return output;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -25,20 +59,7 @@ namespace DesktopApp1
             if (hasSelectedSoftwareVersion == 1)
             {
                 string downloadLink = downloadVersion;
-                Form2 f2 = new Form2(downloadLink);
-                f2.ShowDialog();
-                //f2.Close();
-                System.Diagnostics.Process process = new System.Diagnostics.Process();
-                System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-                startInfo.UseShellExecute = false;
-                startInfo.RedirectStandardOutput = true;
-                startInfo.FileName = "CMD.exe";
-                startInfo.Arguments = "/c dir";
-               process.StartInfo = startInfo;
-                process.Start();
-                string output = process.StandardOutput.ReadToEnd();
-                MessageBox.Show(output);
-                process.WaitForExit();
+                
             }
             else
             {
@@ -112,12 +133,15 @@ namespace DesktopApp1
             System.Diagnostics.Process process = new System.Diagnostics.Process();
             System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
             startInfo.UseShellExecute = false;
+            startInfo.RedirectStandardError = true;
             startInfo.RedirectStandardOutput = true;
-            startInfo.FileName = "adb.exe";
+            startInfo.FileName = "./adb/adb.exe";
             startInfo.Arguments = command;
+            //startInfo.WindowStyle = ProcessWindowStyle.Hidden;
             process.StartInfo = startInfo;
             process.Start();
             string output = process.StandardOutput.ReadToEnd();
+            output += process.StandardError.ReadToEnd();
             //MessageBox.Show(output);
             process.WaitForExit();
             return output;
@@ -128,13 +152,16 @@ namespace DesktopApp1
             System.Diagnostics.Process process = new System.Diagnostics.Process();
             System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
             startInfo.UseShellExecute = false;
+            startInfo.RedirectStandardError = true;
             startInfo.RedirectStandardOutput = true;
-            startInfo.FileName = "fastboot.exe";
+            startInfo.FileName = "./adb/fastboot.exe";
             startInfo.Arguments = command;
-            MessageBox.Show(command);
+            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            //MessageBox.Show(command);
             process.StartInfo = startInfo;
             process.Start();
             string output = process.StandardOutput.ReadToEnd();
+            output += process.StandardError.ReadToEnd();
             //MessageBox.Show(output);
             process.WaitForExit();
             return output;
@@ -218,7 +245,7 @@ namespace DesktopApp1
                 return;
             }
             autoFastboot();
-            string currentPartition;
+            //string currentPartition;
             for (int i = 0; i < partitions.Count; i++)
             {
                 if (flashImg(partitions[i], textBox1.Text) == true)
@@ -229,8 +256,8 @@ namespace DesktopApp1
                 {
                     
                     string message = $"flashing the {partitions[i]} failed.";
-                    string caption = "Error!";
-                    MessageBoxButtons buttons = MessageBoxButtons.AbortRetryIgnore;
+                    //string caption = "Error!";
+                   // MessageBoxButtons buttons = MessageBoxButtons.AbortRetryIgnore;
                     DialogResult result = new DialogResult();
 
                     if (result == DialogResult.Retry)
@@ -271,7 +298,7 @@ namespace DesktopApp1
         }
         private void groupBox4_Enter(object sender, EventArgs e)
         {
-
+            
         }
 
         private void textBox2_TextChanged(object sender, EventArgs e)
@@ -291,6 +318,8 @@ namespace DesktopApp1
             {
                 return;
             }
+            
+
             autoFastboot();
             string test;
             test = fastboot($"boot \"{textBox2.Text}\"");
@@ -326,13 +355,13 @@ namespace DesktopApp1
                 return;
             }
             autoFastboot();
-            fastboot($"boot {textBox3.Text}");
+            fastboot($"boot \"{textBox3.Text}\"");
             if (checkExist(textBox4.Text, ".img") == false)
             {
                 return;
             }
-            autoFastboot();
-            fastboot($"boot {textBox3.Text}");
+            //autoFastboot();
+           // fastboot($"boot {textBox3.Text}");
 
             string message = $"Booting TWRP, Once it starts please unlock and select Advanced>Sideload then swipe to start sideload and click OK";
             string caption = "Instructions";
@@ -342,20 +371,27 @@ namespace DesktopApp1
             {
                 return;
             }
-            string zipResult;
-            zipResult = adb($"sideload {textBox3.Text}");
-            if (zipResult.Contains("error"))
+            string zipResult = "failed";
+            while (zipResult.Contains("failed") || zipResult.Length > 5)
             {
-                message = $"An error has ocurred. Would you like to see the ADB output?";
-                caption = "Instructions";
-                buttons = MessageBoxButtons.YesNo;
-                DialogResult results = new DialogResult();
-                if (results == DialogResult.Yes)
+                
+                System.Threading.Thread.Sleep(15000);
+                zipResult = adb($"sideload \"{textBox3.Text}\"");
+                Console.WriteLine(zipResult);
+                if (zipResult.Contains("error"))
                 {
-                    MessageBox.Show(zipResult);
+                    message = $"An error has ocurred. Would you like to see the ADB output?";
+                    caption = "Instructions";
+                    buttons = MessageBoxButtons.YesNo;
+                    DialogResult results = new DialogResult();
+                    if (results == DialogResult.Yes)
+                    {
+                        MessageBox.Show(zipResult);
+                    }
+                    return;
                 }
-                return;
             }
+            MessageBox.Show(zipResult);
             return;
 
         }
@@ -396,6 +432,58 @@ namespace DesktopApp1
 
         private void Form1_Load(object sender, EventArgs e)
         {
+
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+            // String combo = comboBox1.SelectedValue.ToString();
+            //MessageBox.Show(combo);
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            var item2 = comboBox1.SelectedItem;
+            MyType ter = (MyType)item2;
+            try { downloadVersion = ter.link; }
+            catch {
+                MessageBox.Show("Please select a version");
+                return;
+            };
+            Form2 f2 = new Form2(downloadVersion);
+            f2.ShowDialog();
+            
+
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            getCommands test = new getCommands();
+            string[,] commands;
+            //MessageBox.Show(cmdAsync("dir").ToString());
+            commands = test.findCommands(@"C:\latestA2fastboot\jasmine_global_images_V10.0.2.0.PDIMIFJ_9.0\flash_all.bat");
+            
+            int numItems = commands.GetLength(0);
+            string fileLocation = @"C:\latestA2fastboot\jasmine_global_images_V10.0.2.0.PDIMIFJ_9.0\images";
+            for (int i = 0; i < numItems; i++)
+            {
+                string est = @"flash " + commands[i , 1] + " " + fileLocation + "\\" + commands[i, 0];
+                string exitCode = fastboot(est);
+                if (exitCode.Contains("error"))
+                {
+                    string message = $"An error has ocurred. Would you like to see the ADB output?";
+                    string caption = "Instructions";
+                    MessageBoxButtons buttons = MessageBoxButtons.OKCancel;
+                    buttons = MessageBoxButtons.YesNo;
+                    DialogResult results = new DialogResult();
+                    if (results == DialogResult.Yes)
+                    {
+                        MessageBox.Show(exitCode);
+                    }
+                    return;
+                }
+            }
 
         }
     }
