@@ -117,7 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="Console.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
+  <data name="richTextBox1.Text" xml:space="preserve">
+    <value>Due to me not owning a Xiaomi Mi 6X or A2 Lite along with the need for a reliable phone, I cannot develop for the 6X unless I have it as a second device. It will help me to add new and better features.
+Any donations I receive will go into a fund for a 6X. Currently I have X dollars of Z dollars to buy one. You can donate to my PayPal below. Anything is welcome, even if it is only ten cents. Thank you!
+
+</value>
+  </data>
 </root>

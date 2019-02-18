@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -11,11 +12,16 @@ namespace DesktopApp1.subroutines.adb
 {
     class runExternalProcesses
     {
+        
         private StartPage Start;
-
+        private static string fastbootOutput;
+        private static string adbOutput;
+        private static string cmdOutput;
         public runExternalProcesses(StartPage startPage)
         {
             this.Start = startPage;
+            
+            
         }
         public string EDL()
         {
@@ -120,59 +126,83 @@ namespace DesktopApp1.subroutines.adb
         }
         public string adb(string command)
         {
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-            startInfo.UseShellExecute = false;
-            startInfo.RedirectStandardError = true;
-            startInfo.RedirectStandardOutput = true;
-            startInfo.FileName = "./adb/adb.exe";
-            startInfo.Arguments = command;
-            //startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            process.StartInfo = startInfo;
-            process.Start();
-            string output = process.StandardOutput.ReadToEnd();
-            output += process.StandardError.ReadToEnd();
-            //MessageBox.Show(output);
-            process.WaitForExit();
-            return output;
+            string adbOutput = cmd("adb " + command);
+            return adbOutput;
         }
 
         public string fastboot(string command)
         {
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-            startInfo.UseShellExecute = false;
-            startInfo.RedirectStandardError = true;
-            startInfo.RedirectStandardOutput = true;
-            startInfo.FileName = "./adb/fastboot.exe";
-            startInfo.Arguments = command;
-            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            //MessageBox.Show(command);
-            process.StartInfo = startInfo;
-            process.Start();
-            string output = process.StandardOutput.ReadToEnd();
-            output += process.StandardError.ReadToEnd();
-            //MessageBox.Show(output);
-            process.WaitForExit();
-            return output;
+            string fastbootOutput = cmd("fastboot " + command);
+            return fastbootOutput;
         }
-        private async System.Threading.Tasks.Task<string> cmdAsync(string command)
-        {
-            string currentOutput;
+        
 
+        public string cmd(string command)
+        {
+            
+            
             System.Diagnostics.Process process = new System.Diagnostics.Process();
             System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
             startInfo.UseShellExecute = false;
+            startInfo.CreateNoWindow = true;
             startInfo.RedirectStandardOutput = true;
+            startInfo.RedirectStandardError = true;
+            
             startInfo.FileName = "cmd.exe";
             startInfo.Arguments = "@ /c " + command;
-            //startInfo.WindowStyle = ProcessWindowStyle.Hidden;
             process.StartInfo = startInfo;
+            process.OutputDataReceived += CaptureOutput;
+            process.ErrorDataReceived += CaptureError;
             process.Start();
-            string output = process.StandardOutput.ReadToEnd();
-            currentOutput = await process.StandardOutput.ReadLineAsync();
+            process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
+            //Start.c.addToConsole(process.StandardOutput.ReadToEnd().ToString());
+            //process.
             process.WaitForExit();
-            return output;
+           //currentOutput = (process.StandardOutput.ReadToEnd() + process.StandardError.ReadToEnd());
+
+            return cmdOutput;
+        }
+        void CaptureOutput(object sender, DataReceivedEventArgs e)
+        {
+            if (e.Data != null)
+            {
+                ShowOutput(e.Data, ConsoleColor.Green);
+                Start.c.addToConsole(e.Data.ToString() + "\n");
+                cmdOutput += (e.Data.ToString() + "\n");
+            }
+            else
+            {
+                cmdOutput += " ";
+            } 
+
+        }
+
+        static void CaptureError(object sender, DataReceivedEventArgs e)
+        {
+            if (e.Data != null)
+            {
+                ShowOutput(e.Data, ConsoleColor.Green);
+               // Start.c.addToConsole(e.Data.ToString() + "\n");
+                cmdOutput += (e.Data.ToString() + "\n");
+            }
+            else
+            {
+                cmdOutput += " ";
+            }
+            //ShowOutput(e.Data, ConsoleColor.Red);
+            //cmdOutput += (e.Data.ToString() + "\n");
+        }
+        static void ShowOutput(string data, ConsoleColor color)
+        {
+            if (data != null)
+            {
+                ConsoleColor oldColor = Console.ForegroundColor;
+                Console.ForegroundColor = color;
+                Console.WriteLine("Received: {0}", data);
+                Console.ForegroundColor = oldColor;
+            }
         }
     }
+
 }

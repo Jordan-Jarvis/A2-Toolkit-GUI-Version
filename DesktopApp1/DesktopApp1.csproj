@@ -49,6 +49,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -60,6 +61,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dialogs\Settings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\Settings.Designer.cs">
+      <DependentUpon>Settings.cs</DependentUpon>
+    </Compile>
     <Compile Include="subroutines\adb\BootloaderOptions.cs" />
     <Compile Include="Dialogs\ConsoleDisplay.cs">
       <SubType>Form</SubType>
@@ -87,6 +94,10 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="subroutines\Settings.cs" />
+    <Compile Include="Testing\StickyWindow.cs" />
+    <EmbeddedResource Include="Dialogs\Settings.resx">
+      <DependentUpon>Settings.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\StartPage.resx">
       <DependentUpon>StartPage.cs</DependentUpon>
     </EmbeddedResource>

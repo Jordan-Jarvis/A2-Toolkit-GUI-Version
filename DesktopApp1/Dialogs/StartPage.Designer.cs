@@ -2,10 +2,6 @@ namespace DesktopApp1
 {
     partial class StartPage
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
-        public System.ComponentModel.IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -46,7 +42,6 @@ namespace DesktopApp1
             this.button1 = new System.Windows.Forms.Button();
             this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
             this.button3 = new System.Windows.Forms.Button();
             this.browseTwrp = new System.Windows.Forms.Button();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
@@ -61,16 +56,27 @@ namespace DesktopApp1
             this.button6 = new System.Windows.Forms.Button();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.button7 = new System.Windows.Forms.Button();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripLabel1 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.settings2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.settings3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.donateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.checkBox3 = new System.Windows.Forms.CheckBox();
+            this.checkBox4 = new System.Windows.Forms.CheckBox();
+            this.checkBox5 = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox5.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // reboot
             // 
-            this.reboot.Location = new System.Drawing.Point(343, 64);
+            this.reboot.Location = new System.Drawing.Point(15, 19);
             this.reboot.Name = "reboot";
             this.reboot.Size = new System.Drawing.Size(103, 23);
             this.reboot.TabIndex = 1;
@@ -80,7 +86,7 @@ namespace DesktopApp1
             // 
             // rebootEDL
             // 
-            this.rebootEDL.Location = new System.Drawing.Point(343, 93);
+            this.rebootEDL.Location = new System.Drawing.Point(15, 52);
             this.rebootEDL.Name = "rebootEDL";
             this.rebootEDL.Size = new System.Drawing.Size(103, 23);
             this.rebootEDL.TabIndex = 2;
@@ -90,7 +96,7 @@ namespace DesktopApp1
             // 
             // enterFastboot
             // 
-            this.enterFastboot.Location = new System.Drawing.Point(343, 122);
+            this.enterFastboot.Location = new System.Drawing.Point(15, 81);
             this.enterFastboot.Name = "enterFastboot";
             this.enterFastboot.Size = new System.Drawing.Size(103, 23);
             this.enterFastboot.TabIndex = 3;
@@ -100,7 +106,7 @@ namespace DesktopApp1
             // 
             // exitFastboot
             // 
-            this.exitFastboot.Location = new System.Drawing.Point(15, 104);
+            this.exitFastboot.Location = new System.Drawing.Point(15, 110);
             this.exitFastboot.Name = "exitFastboot";
             this.exitFastboot.Size = new System.Drawing.Size(103, 23);
             this.exitFastboot.TabIndex = 4;
@@ -140,7 +146,7 @@ namespace DesktopApp1
             // 
             // browse
             // 
-            this.browse.Location = new System.Drawing.Point(172, 105);
+            this.browse.Location = new System.Drawing.Point(172, 80);
             this.browse.Name = "browse";
             this.browse.Size = new System.Drawing.Size(75, 23);
             this.browse.TabIndex = 10;
@@ -177,9 +183,9 @@ namespace DesktopApp1
             this.groupBox1.Controls.Add(this.unlockFlashing);
             this.groupBox1.Controls.Add(this.unlockCritical);
             this.groupBox1.Controls.Add(this.unlockOEM);
-            this.groupBox1.Location = new System.Drawing.Point(484, 47);
+            this.groupBox1.Location = new System.Drawing.Point(484, 28);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(125, 153);
+            this.groupBox1.Size = new System.Drawing.Size(125, 222);
             this.groupBox1.TabIndex = 14;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Unlock Bootloader";
@@ -188,9 +194,12 @@ namespace DesktopApp1
             // 
             this.groupBox2.BackColor = System.Drawing.Color.FloralWhite;
             this.groupBox2.Controls.Add(this.exitFastboot);
-            this.groupBox2.Location = new System.Drawing.Point(328, 47);
+            this.groupBox2.Controls.Add(this.reboot);
+            this.groupBox2.Controls.Add(this.rebootEDL);
+            this.groupBox2.Controls.Add(this.enterFastboot);
+            this.groupBox2.Location = new System.Drawing.Point(328, 28);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(134, 153);
+            this.groupBox2.Size = new System.Drawing.Size(134, 222);
             this.groupBox2.TabIndex = 15;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Reboot Options";
@@ -198,11 +207,12 @@ namespace DesktopApp1
             // groupBox3
             // 
             this.groupBox3.BackColor = System.Drawing.Color.White;
+            this.groupBox3.Controls.Add(this.checkBox5);
             this.groupBox3.Controls.Add(this.button1);
             this.groupBox3.Controls.Add(this.textBox1);
             this.groupBox3.Controls.Add(this.browse);
             this.groupBox3.Controls.Add(this.checkedListBox1);
-            this.groupBox3.Location = new System.Drawing.Point(328, 222);
+            this.groupBox3.Location = new System.Drawing.Point(327, 256);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(280, 168);
             this.groupBox3.TabIndex = 16;
@@ -239,38 +249,31 @@ namespace DesktopApp1
             // groupBox4
             // 
             this.groupBox4.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.groupBox4.Controls.Add(this.textBox2);
+            this.groupBox4.Controls.Add(this.checkBox2);
+            this.groupBox4.Controls.Add(this.comboBox2);
             this.groupBox4.Controls.Add(this.button3);
             this.groupBox4.Controls.Add(this.browseTwrp);
-            this.groupBox4.Location = new System.Drawing.Point(41, 222);
+            this.groupBox4.Location = new System.Drawing.Point(15, 256);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(281, 168);
+            this.groupBox4.Size = new System.Drawing.Size(307, 168);
             this.groupBox4.TabIndex = 17;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Start TWRP image";
             this.groupBox4.Enter += new System.EventHandler(this.groupBox4_Enter);
             // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(21, 134);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(254, 20);
-            this.textBox2.TabIndex = 3;
-            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
-            // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(191, 19);
+            this.button3.Location = new System.Drawing.Point(226, 19);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 2;
             this.button3.Text = "LAUNCH!";
             this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click_1);
+            this.button3.Click += new System.EventHandler(this.button3_Click_1Async);
             // 
             // browseTwrp
             // 
-            this.browseTwrp.Location = new System.Drawing.Point(191, 105);
+            this.browseTwrp.Location = new System.Drawing.Point(226, 105);
             this.browseTwrp.Name = "browseTwrp";
             this.browseTwrp.Size = new System.Drawing.Size(75, 23);
             this.browseTwrp.TabIndex = 0;
@@ -281,6 +284,8 @@ namespace DesktopApp1
             // groupBox5
             // 
             this.groupBox5.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.groupBox5.Controls.Add(this.checkBox4);
+            this.groupBox5.Controls.Add(this.checkBox3);
             this.groupBox5.Controls.Add(this.checkBox1);
             this.groupBox5.Controls.Add(this.label3);
             this.groupBox5.Controls.Add(this.label2);
@@ -289,9 +294,9 @@ namespace DesktopApp1
             this.groupBox5.Controls.Add(this.textBox3);
             this.groupBox5.Controls.Add(this.button2);
             this.groupBox5.Controls.Add(this.button4);
-            this.groupBox5.Location = new System.Drawing.Point(47, 47);
+            this.groupBox5.Location = new System.Drawing.Point(12, 28);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(275, 153);
+            this.groupBox5.Size = new System.Drawing.Size(310, 222);
             this.groupBox5.TabIndex = 18;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Install Zip File";
@@ -299,7 +304,7 @@ namespace DesktopApp1
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(15, 41);
+            this.checkBox1.Location = new System.Drawing.Point(15, 23);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(170, 17);
             this.checkBox1.TabIndex = 8;
@@ -310,7 +315,7 @@ namespace DesktopApp1
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 108);
+            this.label3.Location = new System.Drawing.Point(12, 161);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(116, 13);
             this.label3.TabIndex = 7;
@@ -319,7 +324,7 @@ namespace DesktopApp1
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 61);
+            this.label2.Location = new System.Drawing.Point(6, 75);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(101, 13);
             this.label2.TabIndex = 6;
@@ -338,7 +343,7 @@ namespace DesktopApp1
             // 
             // textBox4
             // 
-            this.textBox4.Location = new System.Drawing.Point(15, 77);
+            this.textBox4.Location = new System.Drawing.Point(15, 102);
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(254, 20);
             this.textBox4.TabIndex = 4;
@@ -347,7 +352,7 @@ namespace DesktopApp1
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(15, 127);
+            this.textBox3.Location = new System.Drawing.Point(15, 180);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(254, 20);
             this.textBox3.TabIndex = 3;
@@ -366,7 +371,7 @@ namespace DesktopApp1
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(191, 103);
+            this.button4.Location = new System.Drawing.Point(191, 128);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
             this.button4.TabIndex = 0;
@@ -376,7 +381,7 @@ namespace DesktopApp1
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(344, 401);
+            this.button6.Location = new System.Drawing.Point(343, 435);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(75, 23);
             this.button6.TabIndex = 20;
@@ -387,7 +392,7 @@ namespace DesktopApp1
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(344, 430);
+            this.comboBox1.Location = new System.Drawing.Point(343, 464);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(217, 21);
             this.comboBox1.TabIndex = 21;
@@ -396,7 +401,7 @@ namespace DesktopApp1
             // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(496, 401);
+            this.button7.Location = new System.Drawing.Point(495, 435);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(75, 23);
             this.button7.TabIndex = 22;
@@ -404,12 +409,107 @@ namespace DesktopApp1
             this.button7.UseVisualStyleBackColor = true;
             this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
-            // Form1
+            // toolStrip1
+            // 
+            this.toolStrip1.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripLabel1});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(665, 25);
+            this.toolStrip1.TabIndex = 23;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // toolStripLabel1
+            // 
+            this.toolStripLabel1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.settings2ToolStripMenuItem,
+            this.settings3ToolStripMenuItem,
+            this.donateToolStripMenuItem});
+            this.toolStripLabel1.Name = "toolStripLabel1";
+            this.toolStripLabel1.Size = new System.Drawing.Size(38, 22);
+            this.toolStripLabel1.Text = "File";
+            // 
+            // settings2ToolStripMenuItem
+            // 
+            this.settings2ToolStripMenuItem.Name = "settings2ToolStripMenuItem";
+            this.settings2ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.settings2ToolStripMenuItem.Text = "Settings";
+            this.settings2ToolStripMenuItem.Click += new System.EventHandler(this.settings2ToolStripMenuItem_Click);
+            // 
+            // settings3ToolStripMenuItem
+            // 
+            this.settings3ToolStripMenuItem.Name = "settings3ToolStripMenuItem";
+            this.settings3ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.settings3ToolStripMenuItem.Text = "About";
+            // 
+            // donateToolStripMenuItem
+            // 
+            this.donateToolStripMenuItem.Name = "donateToolStripMenuItem";
+            this.donateToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.donateToolStripMenuItem.Text = "Donate";
+            // 
+            // comboBox2
+            // 
+            this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.Location = new System.Drawing.Point(56, 134);
+            this.comboBox2.Name = "comboBox2";
+            this.comboBox2.Size = new System.Drawing.Size(245, 21);
+            this.comboBox2.TabIndex = 22;
+            this.comboBox2.Text = "Choose Twrp Image";
+            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
+            // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Location = new System.Drawing.Point(125, 109);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(95, 17);
+            this.checkBox2.TabIndex = 23;
+            this.checkBox2.Text = "Save Location";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
+            // 
+            // checkBox3
+            // 
+            this.checkBox3.AutoSize = true;
+            this.checkBox3.Location = new System.Drawing.Point(171, 157);
+            this.checkBox3.Name = "checkBox3";
+            this.checkBox3.Size = new System.Drawing.Size(95, 17);
+            this.checkBox3.TabIndex = 24;
+            this.checkBox3.Text = "Save Location";
+            this.checkBox3.UseVisualStyleBackColor = true;
+            this.checkBox3.CheckedChanged += new System.EventHandler(this.checkBox3_CheckedChanged);
+            // 
+            // checkBox4
+            // 
+            this.checkBox4.AutoSize = true;
+            this.checkBox4.Location = new System.Drawing.Point(171, 75);
+            this.checkBox4.Name = "checkBox4";
+            this.checkBox4.Size = new System.Drawing.Size(95, 17);
+            this.checkBox4.TabIndex = 25;
+            this.checkBox4.Text = "Save Location";
+            this.checkBox4.UseVisualStyleBackColor = true;
+            this.checkBox4.CheckedChanged += new System.EventHandler(this.checkBox4_CheckedChanged);
+            // 
+            // checkBox5
+            // 
+            this.checkBox5.AutoSize = true;
+            this.checkBox5.Location = new System.Drawing.Point(168, 109);
+            this.checkBox5.Name = "checkBox5";
+            this.checkBox5.Size = new System.Drawing.Size(95, 17);
+            this.checkBox5.TabIndex = 24;
+            this.checkBox5.Text = "Save Location";
+            this.checkBox5.UseVisualStyleBackColor = true;
+            this.checkBox5.CheckedChanged += new System.EventHandler(this.checkBox5_CheckedChanged);
+            // 
+            // StartPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(665, 506);
+            this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.button6);
@@ -418,12 +518,9 @@ namespace DesktopApp1
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.enterFastboot);
-            this.Controls.Add(this.rebootEDL);
-            this.Controls.Add(this.reboot);
             this.Controls.Add(this.groupBox2);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "Form1";
+            this.Name = "StartPage";
             this.Text = "Jarvinator Mi A2 Toolkit";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
@@ -434,6 +531,8 @@ namespace DesktopApp1
             this.groupBox4.PerformLayout();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -457,7 +556,6 @@ namespace DesktopApp1
         public System.Windows.Forms.Button button1;
         public System.Windows.Forms.CheckedListBox checkedListBox1;
         public System.Windows.Forms.GroupBox groupBox4;
-        public System.Windows.Forms.TextBox textBox2;
         public System.Windows.Forms.Button button3;
         public System.Windows.Forms.Button browseTwrp;
         public System.Windows.Forms.GroupBox groupBox5;
@@ -472,6 +570,17 @@ namespace DesktopApp1
         public System.Windows.Forms.Button button6;
         public System.Windows.Forms.ComboBox comboBox1;
         public System.Windows.Forms.Button button7;
+        private System.ComponentModel.IContainer components;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripDropDownButton toolStripLabel1;
+        private System.Windows.Forms.ToolStripMenuItem settings2ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem settings3ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem donateToolStripMenuItem;
+        public System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.CheckBox checkBox5;
+        private System.Windows.Forms.CheckBox checkBox4;
+        private System.Windows.Forms.CheckBox checkBox3;
     }
 }
 

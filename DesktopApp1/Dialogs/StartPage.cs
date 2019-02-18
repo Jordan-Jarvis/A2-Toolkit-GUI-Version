@@ -1,3 +1,4 @@
+using DesktopApp1.Dialogs;
 using DesktopApp1.subroutines.adb;
 using System;
 using System.Collections.Generic;
@@ -6,25 +7,64 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 namespace DesktopApp1
 {
     public partial class StartPage : Form
     {
+        public ConsoleDisplay c;
         int hasSelectedSoftwareVersion = 0;
         public string downloadVersion;
         private runExternalProcesses run;
-
+        
         internal runExternalProcesses Run { get => run; set => run = value; }
+        
+
+
 
         public StartPage()
         {
+            
+            c = new ConsoleDisplay();
+            
+            if (!Properties.Settings.Default.ShowConsole)
+            c.Hide();
+
             InitializeComponent();
+            if (Properties.Settings.Default.SaveFlashImg)
+            {
+                textBox1.Text = Properties.Settings.Default.SaveFlashImgLocation;
+                checkBox5.Checked = true;
+            }
+            if (Properties.Settings.Default.SaveLocationZipFileTwrp)
+            {
+                checkBox4.Checked = true;
+                textBox4.Text = Properties.Settings.Default.SaveLocationZipFileTwrpLocation;
+            }
+            if (Properties.Settings.Default.SaveLocationSideLoadZip)
+            {
+                checkBox3.Checked = true;
+                textBox3.Text = Properties.Settings.Default.SaveLocationSideLoadZipLocation;
+            }
+            if (Properties.Settings.Default.SaveLocationTwrp)
+            {
+                checkBox2.Checked = true;
+                comboBox2.Text = Properties.Settings.Default.SaveLocationTwrpLocation;
+            }
+            checkBox1.Checked = Properties.Settings.Default.TwrpInstalled;
+
+            
+
+
+            
+            StickyWindow.RegisterExternalReferenceForm(this);
             Run = new runExternalProcesses(this);
             XMLReader xmlList = new XMLReader("./A2Versions.xml");
             List<VersionInfo> versions = xmlList.getList();
             int i = 0;
+
             foreach (VersionInfo versionInfo in versions)
             {
                 comboBox1.DisplayMember = "version";
@@ -35,13 +75,11 @@ namespace DesktopApp1
                 i++;
             }
             comboBox1.SelectedIndex = 0;
-
             comboBox1.Sorted = true;
+           comboBox2.AutoCompleteMode = AutoCompleteMode.Suggest;
         }
 
 
-
-        
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -214,29 +252,13 @@ namespace DesktopApp1
 
         }
 
-        private void button3_Click_1(object sender, EventArgs e)
-        {
-            // Launches TWRP
-            runExternalProcesses P = new runExternalProcesses(this);
-            if (Run.checkExist(textBox2.Text, ".img") == false)
-            {
-                return;
-            }
-            
-
-            Run.autoFastboot();
-            string test;
-            test = Run.fastboot($"boot \"{textBox2.Text}\"");
-            MessageBox.Show(test);
-        }
 
         private void browseTwrp_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
             openFileDialog1.ShowDialog();
-            textBox2.Text = openFileDialog1.FileName;
-
-
+            comboBox2.Text = openFileDialog1.FileName;
+            
             
         }
 
@@ -273,11 +295,14 @@ namespace DesktopApp1
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
+            Properties.Settings.Default.TwrpInstalled = checkBox1.Checked;
+            Properties.Settings.Default.Save();
             if (checkBox1.Checked == true)
             {
                 button5.Visible = false;
                 label2.Visible = false;
                 textBox4.Visible = false;
+                checkBox4.Visible = false;
             }
             else
             {
@@ -347,6 +372,61 @@ namespace DesktopApp1
                 }
             }
 
+        }
+
+        private async void button3_Click_1Async(object sender, EventArgs e)
+        {
+            //string test1 = 
+            //c.addToConsole(Console.Out.ToString());
+            Task.Run(() => Run.cmd("Toolkit.bat"));
+
+            // Launches TWRP
+            runExternalProcesses P = new runExternalProcesses(this);
+            if (Run.checkExist(comboBox2.Text, ".img") == false)
+            {
+                return;
+            }
+
+
+            Run.autoFastboot();
+            string test;
+            test = Run.fastboot($"boot \"{comboBox2.Text}\"");
+            MessageBox.Show(test);
+        }
+
+        private void settings2ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Settings settings = new Settings(this);
+            settings.ShowDialog();
+        }
+
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.SaveLocationTwrp = checkBox2.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+         //   comboBox2.
+        }
+
+        private void checkBox5_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.SaveFlashImg = checkBox5.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void checkBox3_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.SaveLocationSideLoadZip = checkBox3.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void checkBox4_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.SaveLocationZipFileTwrp = checkBox4.Checked;
+            Properties.Settings.Default.Save();
         }
     }
 }
