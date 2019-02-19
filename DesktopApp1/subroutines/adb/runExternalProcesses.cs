@@ -10,13 +10,16 @@ using System.Windows.Forms;
 
 namespace DesktopApp1.subroutines.adb
 {
-    class runExternalProcesses
+    public class runExternalProcesses
     {
         
         private StartPage Start;
         private static string fastbootOutput;
         private static string adbOutput;
-        private static string cmdOutput;
+        public static string cmdOutput;
+        
+        public static string OutputError;
+        public string Output { get; set; }
         public runExternalProcesses(StartPage startPage)
         {
             this.Start = startPage;
@@ -124,22 +127,21 @@ namespace DesktopApp1.subroutines.adb
                 return;
             }
         }
-        public string adb(string command)
+        public string adb(string arguments)
         {
-            string adbOutput = cmd("adb " + command);
+            string adbOutput = command(".\\Programs\\adb\\adb.exe ", arguments);
             return adbOutput;
         }
 
-        public string fastboot(string command)
+        public string fastboot(string arguments)
         {
-            string fastbootOutput = cmd("fastboot " + command);
+            string fastbootOutput = command(".\\Programs\\adb\\fastboot.exe ", arguments);
             return fastbootOutput;
         }
         
 
-        public string cmd(string command)
+        public string command(string filePath, string arguments)
         {
-            
             
             System.Diagnostics.Process process = new System.Diagnostics.Process();
             System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
@@ -148,8 +150,8 @@ namespace DesktopApp1.subroutines.adb
             startInfo.RedirectStandardOutput = true;
             startInfo.RedirectStandardError = true;
             
-            startInfo.FileName = "cmd.exe";
-            startInfo.Arguments = "@ /c " + command;
+            startInfo.FileName = filePath;
+            startInfo.Arguments = arguments;
             process.StartInfo = startInfo;
             process.OutputDataReceived += CaptureOutput;
             process.ErrorDataReceived += CaptureError;
@@ -170,21 +172,24 @@ namespace DesktopApp1.subroutines.adb
                 ShowOutput(e.Data, ConsoleColor.Green);
                 Start.c.addToConsole(e.Data.ToString() + "\n");
                 cmdOutput += (e.Data.ToString() + "\n");
+                Output = e.Data.ToString();
             }
             else
             {
                 cmdOutput += " ";
-            } 
+            }
+            
 
-        }
+    }
 
         static void CaptureError(object sender, DataReceivedEventArgs e)
         {
             if (e.Data != null)
             {
-                ShowOutput(e.Data, ConsoleColor.Green);
+                //ShowOutput(e.Data, ConsoleColor.Green);
                // Start.c.addToConsole(e.Data.ToString() + "\n");
                 cmdOutput += (e.Data.ToString() + "\n");
+                OutputError += e.Data.ToString();
             }
             else
             {
@@ -193,13 +198,14 @@ namespace DesktopApp1.subroutines.adb
             //ShowOutput(e.Data, ConsoleColor.Red);
             //cmdOutput += (e.Data.ToString() + "\n");
         }
-        static void ShowOutput(string data, ConsoleColor color)
+        public void ShowOutput(string data, ConsoleColor color)
         {
             if (data != null)
             {
                 ConsoleColor oldColor = Console.ForegroundColor;
                 Console.ForegroundColor = color;
                 Console.WriteLine("Received: {0}", data);
+                Output = data;
                 Console.ForegroundColor = oldColor;
             }
         }

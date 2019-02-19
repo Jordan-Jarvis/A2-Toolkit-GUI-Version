@@ -77,7 +77,7 @@ namespace DesktopApp1.Dialogs
                 else
                 {
                     Start.c.Show();
-                }    
+                }   
                 Focus();
             }
             else

@@ -205,13 +205,13 @@ namespace DesktopApp1.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string TEMPORARY {
+        [global::System.Configuration.DefaultSettingValueAttribute("\\Programs\\")]
+        public string Files {
             get {
-                return ((string)(this["TEMPORARY"]));
+                return ((string)(this["Files"]));
             }
             set {
-                this["TEMPORARY"] = value;
+                this["Files"] = value;
             }
         }
         

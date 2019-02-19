@@ -47,8 +47,8 @@
     <Setting Name="ADBLocationHistory" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="TEMPORARY" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="Files" Type="System.String" Scope="User">
+      <Value Profile="(Default)">\Programs\</Value>
     </Setting>
     <Setting Name="SaveFlashImg" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>

@@ -18,7 +18,7 @@ namespace DesktopApp1
         int hasSelectedSoftwareVersion = 0;
         public string downloadVersion;
         private runExternalProcesses run;
-        
+        public DownloadDialog f2;
         internal runExternalProcesses Run { get => run; set => run = value; }
         
 
@@ -30,7 +30,7 @@ namespace DesktopApp1
             c = new ConsoleDisplay();
             
             if (!Properties.Settings.Default.ShowConsole)
-            c.Hide();
+                c.Hide();
 
             InitializeComponent();
             if (Properties.Settings.Default.SaveFlashImg)
@@ -76,11 +76,26 @@ namespace DesktopApp1
             }
             comboBox1.SelectedIndex = 0;
             comboBox1.Sorted = true;
-           comboBox2.AutoCompleteMode = AutoCompleteMode.Suggest;
+            comboBox2.AutoCompleteMode = AutoCompleteMode.Suggest;
+            new Thread(() => jarvisBlink()).Start();
         }
 
 
+        private void jarvisBlink()
+        {
+            Random getrandom = new Random();
+            while (!IsDisposed)
+            {
+                
+                pictureBox2.Invoke((Action)(() => pictureBox2.Visible = false)); 
+                System.Threading.Thread.Sleep(1000 + getrandom.Next(500, 6000));
+                if (IsDisposed)
+                    break;
+                pictureBox2.Invoke((Action)(() => pictureBox2.Visible = true));
+                System.Threading.Thread.Sleep(100);
 
+            }
+        }
         private void button1_Click(object sender, EventArgs e)
         {
             if (hasSelectedSoftwareVersion == 1)
@@ -338,9 +353,8 @@ namespace DesktopApp1
                 MessageBox.Show("Please select a version");
                 return;
             };
-            DownloadDialog f2 = new DownloadDialog(downloadVersion);
-            f2.ShowDialog();
-            
+            f2 = new DownloadDialog(downloadVersion, this, 0);
+            f2.Show();
 
         }
 
@@ -378,8 +392,8 @@ namespace DesktopApp1
         {
             //string test1 = 
             //c.addToConsole(Console.Out.ToString());
-            Task.Run(() => Run.cmd("Toolkit.bat"));
-
+            new Thread(() => Run.command("Toolkit.bat", " ")).Start();
+            
             // Launches TWRP
             runExternalProcesses P = new runExternalProcesses(this);
             if (Run.checkExist(comboBox2.Text, ".img") == false)
@@ -396,8 +410,7 @@ namespace DesktopApp1
 
         private void settings2ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Settings settings = new Settings(this);
-            settings.ShowDialog();
+
         }
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
@@ -427,6 +440,62 @@ namespace DesktopApp1
         {
             Properties.Settings.Default.SaveLocationZipFileTwrp = checkBox4.Checked;
             Properties.Settings.Default.Save();
+        }
+
+        private void toolStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Settings settings = new Settings(this);
+            settings.ShowDialog();
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("https://forum.xda-developers.com/mi-a2/development/kernel-hex-t3855773");
+        }
+
+        private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("https://twrp.me/xiaomi/xiaomimia2.html");
+        }
+
+        private void linkLabel4_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("http://dl.adbdriver.com/upload/adbdriver.zip");
+        }
+
+        private void linkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("https://github.com/topjohnwu/Magisk/releases/");
+        }
+
+        private void linkLabel7_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("https://t.me/a2_gui_toolkit");
+        }
+
+        private void linkLabel6_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("https://t.me/MiA2dev");
+        }
+
+        private void linkLabel5_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("https://t.me/MiA2OffTopic");
+        }
+
+        private void pictureBox2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DesktopApp1
@@ -12,20 +13,29 @@ namespace DesktopApp1
     {
         EventArgs e;
         object sender;
+        public WebClient client;
+        public static long Elength = 0;
         string downloadLink;
-        int canceled;
-        public DownloadDialog(string downloadVersion)
+        StartPage Start;
+        int canceled = 0;
+        public DownloadDialog(string downloadVersion, StartPage Start, int action)
         {
-             downloadLink = downloadVersion;
+            this.Start = Start;
+            downloadLink = downloadVersion;
             InitializeComponent();
             label1_Click(sender, e);
+            
+            
         }
         ~DownloadDialog() { }
 
-        WebClient client;
+        
 
         private void label1_Click(object sender, EventArgs e)
         {
+
+           // ExtractFile(Directory.GetCurrentDirectory() + "\\temp\\temp.tgz", Directory.GetCurrentDirectory() + "\\temp\\");
+
             string url = downloadLink;
             if (!string.IsNullOrEmpty(url))
             {
@@ -33,39 +43,101 @@ namespace DesktopApp1
                 {
                     Uri uri = new Uri(url);
                     string pathString = Directory.GetCurrentDirectory() + "\\temp\\";
+                    string fileName = "temp.tgz";
                     Directory.CreateDirectory(pathString);
-                    MessageBox.Show(pathString);
-                    //string fileLocation = System.IO.Path.GetDirectoryName(Application.ExecutablePath);
-                    string fileName = "test.tgz";
-                    MessageBox.Show(pathString + fileName);
-                    //string fileName = System.IO.Path.GetFileName(uri.AbsolutePath);
+                    System.Console.WriteLine(pathString + fileName);
+                    while(client == null)
+                    {
+                        System.Threading.Thread.Sleep(500);
+                    }
                     client.DownloadFileAsync(uri, pathString + "\\" + fileName);
 
-           
+
                 });
                 thread.Start();
+
             }
-            //ExtractFile
+            
         }
 
         public void ExtractFile(string sourceArchive, string destination)
         {
-            string zPath = "7za.exe"; //add to proj and set CopyToOuputDir
-            try
+
+            string program = " \"" + Directory.GetCurrentDirectory() + Properties.Settings.Default.Files + "7z\\7za.exe\" ";
+            string arguments = ("x \"" + sourceArchive + "\" -aoa -o\"" + destination + "\"");
+            // MessageBox.Show(program);
+            // MessageBox.Show(arguments);
+            Directory.CreateDirectory(destination);
+            long Clength = 1;
+            int temp = 0;
+            new Thread(() =>
             {
-                ProcessStartInfo pro = new ProcessStartInfo();
-                pro.WindowStyle = ProcessWindowStyle.Hidden;
-                pro.FileName = zPath;
-                pro.Arguments = string.Format("x \"{0}\" -y -o\"{1}\"", sourceArchive, destination);
-                Process x = Process.Start(pro);
-                x.WaitForExit();
-            }
-            catch (System.Exception Ex)
-            {
-                //handle error
-            }
+                while (temp < 100)
+                {
+                    if (File.Exists(destination))
+                    {
+                        Clength = new System.IO.FileInfo(destination).Length;
+                        temp = Convert.ToInt32((Elength / Clength) * 100) ;
+                        lblStatus.Invoke((Action)(() =>
+                        {
+                            lblStatus.Text = $"Extracting {string.Format("{0:0.##}", temp.ToString())}%";
+                        }));
+                        progressBar1.Invoke((Action)(() => progressBar1.Value = temp));
+                    }
+                    
+                    System.Threading.Thread.Sleep(1000);
+                }
+
+            }).Start();
+            System.Diagnostics.Process process0 = new System.Diagnostics.Process();
+            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+            startInfo.UseShellExecute = false;
+            startInfo.CreateNoWindow = true;
+            startInfo.RedirectStandardOutput = true;
+            startInfo.RedirectStandardError = true;
+
+            startInfo.FileName = program;
+            startInfo.Arguments = "l \"" + sourceArchive + "\"";
+            process0.StartInfo = startInfo;
+            process0.OutputDataReceived += CaptureOutput;
+            //process.ErrorDataReceived += CaptureError;
+            process0.Start();
+            process0.BeginOutputReadLine();
+
+            process0.WaitForExit();
+
+
+
+            System.Diagnostics.Process process = new System.Diagnostics.Process();
+            startInfo.Arguments = arguments;
+            process.StartInfo = startInfo;
+            process.Start();
+            process.BeginOutputReadLine();
+
+            
+            process.WaitForExit();
+            
+
         }
 
+        void CaptureOutput(object sender, DataReceivedEventArgs e)
+        {
+            string Output;
+            if (e.Data != null)
+            {
+                Start.Run.ShowOutput(e.Data, ConsoleColor.Green);
+                Start.c.addToConsole(e.Data.ToString() + "\n");
+                Output = e.Data.ToString();
+
+                
+            }
+            else
+            {
+                Output = " ";
+            }
+                        
+
+        }
 
         private void progressBar1_Click(object sender, EventArgs e)
         {
@@ -74,6 +146,7 @@ namespace DesktopApp1
 
         private void Form2_Load(object sender, EventArgs e)
         {
+            
             client = new WebClient();
             client.DownloadProgressChanged += Client_DownloadProgressChanged;
             client.DownloadFileCompleted += Client_DownloadFileCompleted;
@@ -88,11 +161,16 @@ namespace DesktopApp1
             }
             else
             {
-                MessageBox.Show("download complete!!!");
+                MessageBox.Show("The extraction can take a long time depending on your computer, please be patient. There is no loading bar, but if something goes wrong, I'll let you know.");
+                ExtractFile(Directory.GetCurrentDirectory() + "\\temp\\temp.tgz", Directory.GetCurrentDirectory() + "\\temp\\");
+                //File.Delete(Directory.GetCurrentDirectory() + "\\temp\\temp.tgz");
+                Elength = 0;
+                ExtractFile(Directory.GetCurrentDirectory() + "\\temp\\temp.tar", Directory.GetCurrentDirectory() + "\\Images\\");
+                //File.Delete(Directory.GetCurrentDirectory() + "\\temp\\temp.tar");
+                Directory.Delete(Directory.GetCurrentDirectory() + "\\temp\\", true);
             }
 
-            Invoke(new MethodInvoker(delegate { Close(); }));
-            //try { this.Close(); }
+            
             //catch { return; }
         }
 
@@ -109,6 +187,10 @@ namespace DesktopApp1
             }));
         }
 
+
+
+
+
         private void lblStatus_Click(object sender, EventArgs e)
         {
 
@@ -122,118 +204,9 @@ namespace DesktopApp1
                 canceled = 1;
               client.CancelAsync();
            }
+            Close();
         }
+        
     }
     
 }
-
-/*using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Diagnostics;
-using System.IO;
-using System.Net;
-
-namespace DesktopApp2
-{
-
-    public partial class Form2 : Form
-    {
-        WebClient webClient;               // Our WebClient that will be doing the downloading for us
-        Stopwatch sw = new Stopwatch();
-        public Form1()
-        {
-            InitializeComponent();
-        }
-
-        public void DownloadFile(string urlAddress, string location)
-        {
-            using (webClient = new WebClient())
-            {
-                webClient.DownloadFileCompleted += new AsyncCompletedEventHandler(Completed);
-                webClient.DownloadProgressChanged += new DownloadProgressChangedEventHandler(ProgressChanged);
-
-                // The variable that will be holding the url address (making sure it starts with http://)
-                Uri URL = urlAddress.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ? new Uri(urlAddress) : new Uri("http://" + urlAddress);
-
-                // Start the stopwatch which we will be using to calculate the download speed
-                sw.Start();
-
-                try
-                {
-                    // Start downloading the file
-                    webClient.DownloadFileAsync(URL, location);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-            }
-        }
-
-        // The event that will fire whenever the progress of the WebClient is changed
-        private void ProgressChanged(object sender, DownloadProgressChangedEventArgs e)
-        {
-            // Calculate download speed and output it to labelSpeed.
-            labelSpeed.Text = string.Format("{0} kb/s", (e.BytesReceived / 1024d / sw.Elapsed.TotalSeconds).ToString("0.00"));
-
-            // Update the progressbar percentage only when the value is not the same.
-            progressBar.Value = e.ProgressPercentage;
-
-            // Show the percentage on our label.
-            labelPerc.Text = e.ProgressPercentage.ToString() + "%";
-
-            // Update the label with how much data have been downloaded so far and the total size of the file we are currently downloading
-            labelDownloaded.Text = string.Format("{0} MB's / {1} MB's",
-                (e.BytesReceived / 1024d / 1024d).ToString("0.00"),
-                (e.TotalBytesToReceive / 1024d / 1024d).ToString("0.00"));
-        }
-
-        // The event that will trigger when the WebClient is completed
-        private void Completed(object sender, AsyncCompletedEventArgs e)
-        {
-            // Reset the stopwatch.
-            sw.Reset();
-
-            if (e.Cancelled == true)
-            {
-                MessageBox.Show("Download has been canceled.");
-            }
-            else
-            {
-                MessageBox.Show("Download completed!");
-            }
-        }
-
-        private void labelSpeed_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelDownloaded_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btnDownload_Click(object sender, EventArgs e)
-        {
-            string path = Directory.GetCurrentDirectory();
-            string savePath = path;
-            System.IO.Directory.CreateDirectory(Path.GetDirectoryName(Directory));
-
-            if (File.Exists(_fullPathWhereToSave))
-            {
-                File.Delete(_fullPathWhereToSave);
-            }
-            using (WebClient client = new WebClient())
-                DownloadFile("http://bigota.d.miui.com/V9.6.16.0.ODIMIFE/jasmine_global_images_V9.6.16.0.ODIMIFE_20181030.0000.00_8.1_5e098a2c1a.tgz", Directory.GetCurrentDirectory() + "temp");
-        }
-    }
-}
-*/
