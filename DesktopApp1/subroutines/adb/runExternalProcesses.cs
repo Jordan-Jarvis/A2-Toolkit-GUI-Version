@@ -26,20 +26,22 @@ namespace DesktopApp1.subroutines.adb
             
             
         }
-        public string EDL()
+        public void EDL()
         {
             adb("reboot bootloader");
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-            startInfo.UseShellExecute = false;
-            startInfo.RedirectStandardOutput = true;
-            startInfo.FileName = "fastboot_edl.exe";
-            startInfo.Arguments = "reboot-edl";
-            process.StartInfo = startInfo;
-            process.Start();
-            string output = process.StandardOutput.ReadToEnd();
-            process.WaitForExit();
-            return output;
+            new Thread(() =>
+            {
+                if (autoFastboot())
+                {
+                    
+                    command("." + Properties.Settings.Default.Files + "adb\\fastboot_edl.exe", "reboot-edl");
+                };
+
+            }).Start();
+
+            
+            
+            return;
         }
         public bool checkExist(string location, string extension)
         {
@@ -107,9 +109,16 @@ namespace DesktopApp1.subroutines.adb
             return 1;
         }
 
-        public void autoFastboot()
+        public bool autoFastboot()
         {
-            string isDevice = fastboot("devices");
+            string isDevice = null;
+
+            foreach (var process in Process.GetProcessesByName("fastboot"))
+            {
+                process.Kill();
+            }
+
+            new Thread(() => fastboot("devices")).Start();
             if (string.IsNullOrEmpty(isDevice) || string.IsNullOrWhiteSpace(isDevice))
             {
                 string devices = adb("devices -l");
@@ -120,12 +129,14 @@ namespace DesktopApp1.subroutines.adb
                 else
                 {
                     MessageBox.Show("No devices found. Please ensure it is plugged in and the proper drivers are installed.");
+                    return false;
                 }
             }
             else
             {
-                return;
+                return true;
             }
+            return true;
         }
         public string adb(string arguments)
         {
@@ -142,7 +153,7 @@ namespace DesktopApp1.subroutines.adb
 
         public string command(string filePath, string arguments)
         {
-            
+            Start.c.addToConsole("Running command: " + filePath + " " + arguments + "\n");
             System.Diagnostics.Process process = new System.Diagnostics.Process();
             System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
             startInfo.UseShellExecute = false;
@@ -176,24 +187,25 @@ namespace DesktopApp1.subroutines.adb
             }
             else
             {
-                cmdOutput += " ";
+                return;
             }
             
 
     }
 
-        static void CaptureError(object sender, DataReceivedEventArgs e)
+         void CaptureError(object sender, DataReceivedEventArgs e)
         {
             if (e.Data != null)
             {
                 //ShowOutput(e.Data, ConsoleColor.Green);
-               // Start.c.addToConsole(e.Data.ToString() + "\n");
+
+                Start.c.addToConsole(e.Data.ToString() + "\n");
                 cmdOutput += (e.Data.ToString() + "\n");
                 OutputError += e.Data.ToString();
             }
             else
             {
-                cmdOutput += " ";
+                return;
             }
             //ShowOutput(e.Data, ConsoleColor.Red);
             //cmdOutput += (e.Data.ToString() + "\n");

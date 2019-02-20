@@ -6,10 +6,12 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Media;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
+
 namespace DesktopApp1
 {
     public partial class StartPage : Form
@@ -77,22 +79,33 @@ namespace DesktopApp1
             comboBox1.SelectedIndex = 0;
             comboBox1.Sorted = true;
             comboBox2.AutoCompleteMode = AutoCompleteMode.Suggest;
+            
             new Thread(() => jarvisBlink()).Start();
         }
 
 
         private void jarvisBlink()
         {
+            while (!this.IsHandleCreated)
+            {
+                System.Threading.Thread.Sleep(100);
+            }
             Random getrandom = new Random();
             while (!IsDisposed)
             {
+                if (pictureBox2 != null)
+                {
+                    pictureBox2.Invoke((Action)(() => pictureBox2.Visible = false));
+                }
                 
-                pictureBox2.Invoke((Action)(() => pictureBox2.Visible = false)); 
                 System.Threading.Thread.Sleep(1000 + getrandom.Next(500, 6000));
                 if (IsDisposed)
                     break;
-                pictureBox2.Invoke((Action)(() => pictureBox2.Visible = true));
-                System.Threading.Thread.Sleep(100);
+                if (pictureBox2 != null)
+                {
+                    pictureBox2.Invoke((Action)(() => pictureBox2.Visible = true));
+                }
+                System.Threading.Thread.Sleep(150);
 
             }
         }
@@ -111,32 +124,87 @@ namespace DesktopApp1
 
         private void button2_Click(object sender, EventArgs e)
         {
+            
+            new Thread(() =>
+            {
+                string temp;
+                string isDevice = Run.fastboot("devices");
+                if (!string.IsNullOrEmpty(isDevice) || string.IsNullOrWhiteSpace(isDevice))
+                {
+                    temp = Run.adb("reboot");
+                    if ( temp.Contains("no devices")) 
+                    {
+                        MessageBox.Show("An error occured, the device was not detected. Please ensure it is plugged in with debug enabled and the drivers are up to date.");
+                    }
+                    else if (temp.Contains("error"))
+                    {
+                        MessageBox.Show("An unknown error occured, please check the console output for more info.");
+                    }
+                }
+                else
+                {
+                    temp = Run.fastboot("reboot");
+                }
 
-            string isDevice = Run.fastboot("devices");
-            if (string.IsNullOrEmpty(isDevice) || string.IsNullOrWhiteSpace(isDevice))
-            {
-                Run.adb("reboot");
-            }
-            else
-            {
-                Run.fastboot("reboot");
-            }
+                if (temp.Contains("error"))
+                {
+                    return;
+                }
+                else
+                {
+                    MessageBox.Show("Command sent successfully.");
+                }
+                
+            }).Start();
+
+            
         }
 
         private void button1_Click_1(object sender, EventArgs e)
         {
+            new Thread(() =>
+            {
+                if (Run.autoFastboot())
+                {
+                    Run.EDL();
+                };
+                
+            }).Start();
 
         }
-
-
         private void button3_Click(object sender, EventArgs e)
         {
-            Run.adb("reboot bootloader");
+            new Thread(() =>
+            {
+                string temp;
+                temp = Run.adb("reboot bootloader");
+                if (temp.Contains("error"))
+                    {
+                    if (temp.Contains("no devices"))
+                    {
+                        MessageBox.Show("An error occured, the device was not detected. Please ensure it is plugged in with debug enabled and the drivers are up to date.");
+                    }
+                    else
+                    {
+                        MessageBox.Show("An unknown error occured, please check the console output for more info.");
+                    }
+                    
+                }
+                else
+                {
+                    MessageBox.Show("Command sent successfully.");
+                }
+            
+            }).Start();
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            Run.fastboot("reboot");
+            new Thread(() =>
+            {
+                Run.fastboot("reboot");
+            }).Start();
+            MessageBox.Show("Command sent!");
         }
 
         
@@ -144,20 +212,77 @@ namespace DesktopApp1
 
         private void unlockFlashing_Click(object sender, EventArgs e)
         {
-            Run.autoFastboot();
-            Run.fastboot("flashing unlock");
+            string message = "UNLOCKING YOUR BOOTLOADER WILL FACTORY RESET YOUR DEVICE! PLEASE BACK UP EVERYTHING! press ok to continue.";
+            string caption = "Warning";
+            MessageBoxButtons buttons = MessageBoxButtons.OKCancel;
+            
+
+            DialogResult results = MessageBox.Show(message, caption, buttons);
+
+
+            if (results == DialogResult.Cancel)
+            {
+                return;
+            }
+            MessageBox.Show("Please ensure the \"oem unlocking\" and \"usb debugging\" is enabled in Developer Settings. (Once unlocked, DO NOT TURN OFF OEM UNLOCKING! IT COULD BRICK YOUR DEVICE!) Your phone may ask to authorize the computer, if it does, select yes.");
+            new Thread(() =>
+            {
+                if (Run.autoFastboot())
+                {
+                    Run.fastboot("flashing unlock");
+                    MessageBox.Show("Please select unlock using the volume buttons, power button is select. Once you do that, you will be done!");
+                }
+            }).Start();
         }
 
         private void unlockOEM_Click(object sender, EventArgs e)
         {
-            Run.autoFastboot();
-            Run.fastboot("oem unlock");
+            string message = "UNLOCKING YOUR BOOTLOADER WILL FACTORY RESET YOUR DEVICE! PLEASE BACK UP EVERYTHING! press ok to continue.";
+            string caption = "Warning";
+            MessageBoxButtons buttons = MessageBoxButtons.OKCancel;
+
+
+            DialogResult results = MessageBox.Show(message, caption, buttons);
+
+
+            if (results == DialogResult.Cancel)
+            {
+                return;
+            }
+            MessageBox.Show("Please ensure the \"oem unlocking\" and \"usb debugging\" is enabled in Developer Settings. (Once unlocked, DO NOT TURN OFF OEM UNLOCKING! IT COULD BRICK YOUR DEVICE!) Your phone may ask to authorize the computer, if it does, select yes.");
+            new Thread(() =>
+            {
+                if (Run.autoFastboot())
+                {
+                    Run.fastboot("oem unlock");
+                    MessageBox.Show("Please select unlock using the volume buttons, power button is select. Once you do that, you will be done!");
+                }
+            }).Start();
         }
 
         private void unlockCritical_Click(object sender, EventArgs e)
         {
-            Run.autoFastboot();
-            Run.fastboot("flashing unlock_critical");
+            string message = "UNLOCKING YOUR BOOTLOADER WILL FACTORY RESET YOUR DEVICE! PLEASE BACK UP EVERYTHING! press ok to continue.";
+            string caption = "Warning";
+            MessageBoxButtons buttons = MessageBoxButtons.OKCancel;
+
+
+            DialogResult results = MessageBox.Show(message, caption, buttons);
+
+
+            if (results == DialogResult.Cancel)
+            {
+                return;
+            }
+            MessageBox.Show("Please ensure the \"oem unlocking\" and \"usb debugging\" is enabled in Developer Settings. (Once unlocked, DO NOT TURN OFF OEM UNLOCKING! IT COULD BRICK YOUR DEVICE!) Your phone may ask to authorize the computer, if it does, select yes.");
+            new Thread(() =>
+            {
+                if (Run.autoFastboot())
+                {
+                    Run.fastboot("flashing unlock_critical");
+                    MessageBox.Show("Please select unlock using the volume buttons, power button is select. Once you do that, you will be done!");
+                }
+            }).Start();
         }
 
         private void browse_Click(object sender, EventArgs e)
@@ -490,12 +615,25 @@ namespace DesktopApp1
 
         private void pictureBox2_Click(object sender, EventArgs e)
         {
-
+            Invoke((Action)(() =>
+            {
+                System.Media.SoundPlayer sp = new System.Media.SoundPlayer(Properties.Resources.oof);
+                sp.Play();
+            }));
         }
 
         private void label6_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+           /* Invoke((Action)(() =>
+            {
+                SoundPlayer s = new SoundPlayer(".\\Programs\\Egg\\oof.wav");
+                s.Play();
+            }));*/
         }
     }
 }

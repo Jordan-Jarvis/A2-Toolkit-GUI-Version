@@ -116,7 +116,7 @@ namespace DesktopApp1
 
             
             process.WaitForExit();
-            
+            Invoke((Action)(() => Close()));
 
         }
 
@@ -125,6 +125,8 @@ namespace DesktopApp1
             string Output;
             if (e.Data != null)
             {
+                progressBar1.Invoke((Action)(() => progressBar1.Value = 50));
+                lblStatus.Invoke((Action)(() => lblStatus.Text = "EXTRACTING.... PLEASE WAIT!"));
                 Start.Run.ShowOutput(e.Data, ConsoleColor.Green);
                 Start.c.addToConsole(e.Data.ToString() + "\n");
                 Output = e.Data.ToString();
@@ -133,7 +135,7 @@ namespace DesktopApp1
             }
             else
             {
-                Output = " ";
+                return;
             }
                         
 

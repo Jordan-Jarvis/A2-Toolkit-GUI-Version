@@ -35,7 +35,7 @@ namespace DesktopApp1
                 Invoke(new MethodInvoker(delegate ()
                 {
 
-                    Console.Text = Console.Text + t;
+                    Console.Text = t + Console.Text ;
                     // Console.Text = Console.Text + t;
                 }));
             }
