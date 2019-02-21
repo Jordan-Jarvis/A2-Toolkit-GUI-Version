@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DesktopApp1", "DesktopApp1\DesktopApp1.csproj", "{01903F66-5235-4DBB-AB5E-C2C31DC20F1A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jarvinator Toolkit", "DesktopApp1\Jarvinator Toolkit.csproj", "{01903F66-5235-4DBB-AB5E-C2C31DC20F1A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Media;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -20,14 +21,17 @@ namespace DesktopApp1
         int hasSelectedSoftwareVersion = 0;
         public string downloadVersion;
         private runExternalProcesses run;
-        public DownloadDialog f2;
+        public DownloadDialog f0;
         internal runExternalProcesses Run { get => run; set => run = value; }
-        
 
 
 
         public StartPage()
         {
+            //if(Properties.Settings.Default.ImagesLocation.Contains("default") && !Properties.Settings.Default.ImagesLocationIsCustom)
+            {
+                Properties.Settings.Default.ImagesLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\Images\\";
+            }
             
             c = new ConsoleDisplay();
             
@@ -44,6 +48,7 @@ namespace DesktopApp1
             {
                 checkBox4.Checked = true;
                 textBox4.Text = Properties.Settings.Default.SaveLocationZipFileTwrpLocation;
+                
             }
             if (Properties.Settings.Default.SaveLocationSideLoadZip)
             {
@@ -52,15 +57,33 @@ namespace DesktopApp1
             }
             if (Properties.Settings.Default.SaveLocationTwrp)
             {
+                
+                TwrpImage.Text = Properties.Settings.Default.SaveLocationTwrpLocation;
                 checkBox2.Checked = true;
-                comboBox2.Text = Properties.Settings.Default.SaveLocationTwrpLocation;
             }
             checkBox1.Checked = Properties.Settings.Default.TwrpInstalled;
 
+
+
+
+
+
+
+            //get list items from saved location
+            Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string[] temp = Directory.GetDirectories(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\Images\\");
+
+            for(int r = 0; r < temp.Length; r++ )
+            {
+                string[] tem = temp[r].Split('\\');
+
+                listBox1.Items.Add(tem[tem.Length - 1]);
+            }
             
 
 
-            
+
+
             StickyWindow.RegisterExternalReferenceForm(this);
             Run = new runExternalProcesses(this);
             XMLReader xmlList = new XMLReader("./A2Versions.xml");
@@ -76,9 +99,10 @@ namespace DesktopApp1
                 comboBox1.SelectedIndex = i;
                 i++;
             }
-            comboBox1.SelectedIndex = 0;
+            
             comboBox1.Sorted = true;
-            comboBox2.AutoCompleteMode = AutoCompleteMode.Suggest;
+            comboBox1.Text = "Select Version";
+            textBox4.AutoCompleteMode = AutoCompleteMode.Suggest;
             
             new Thread(() => jarvisBlink()).Start();
         }
@@ -124,40 +148,7 @@ namespace DesktopApp1
 
         private void button2_Click(object sender, EventArgs e)
         {
-            
-            new Thread(() =>
-            {
-                string temp;
-                string isDevice = Run.fastboot("devices");
-                if (!string.IsNullOrEmpty(isDevice) || string.IsNullOrWhiteSpace(isDevice))
-                {
-                    temp = Run.adb("reboot");
-                    if ( temp.Contains("no devices")) 
-                    {
-                        MessageBox.Show("An error occured, the device was not detected. Please ensure it is plugged in with debug enabled and the drivers are up to date.");
-                    }
-                    else if (temp.Contains("error"))
-                    {
-                        MessageBox.Show("An unknown error occured, please check the console output for more info.");
-                    }
-                }
-                else
-                {
-                    temp = Run.fastboot("reboot");
-                }
-
-                if (temp.Contains("error"))
-                {
-                    return;
-                }
-                else
-                {
-                    MessageBox.Show("Command sent successfully.");
-                }
-                
-            }).Start();
-
-            
+            new Thread(() => Run.InstallZip()).Start();
         }
 
         private void button1_Click_1(object sender, EventArgs e)
@@ -397,14 +388,16 @@ namespace DesktopApp1
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
             openFileDialog1.ShowDialog();
-            comboBox2.Text = openFileDialog1.FileName;
-            
+            TwrpImage.Text = openFileDialog1.FileName;
             
         }
 
         public void textBox3_TextChanged(object sender, EventArgs e)
         {
-
+            if (Properties.Settings.Default.SaveLocationSideLoadZip)
+            {
+                Properties.Settings.Default.SaveLocationSideLoadZipLocation = textBox3.Text;
+            }
         }
 
         private void button4_Click_1(object sender, EventArgs e)
@@ -416,6 +409,7 @@ namespace DesktopApp1
 
         private void button2_Click_1(object sender, EventArgs e)
         {
+                
             Run.InstallZip();
 
         }
@@ -423,7 +417,10 @@ namespace DesktopApp1
 
         private void textBox4_TextChanged(object sender, EventArgs e)
         {
-
+            if (Properties.Settings.Default.SaveLocationZipFileTwrp)
+            {
+                Properties.Settings.Default.SaveLocationZipFileTwrpLocation = textBox4.Text;
+            }
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -449,6 +446,7 @@ namespace DesktopApp1
                 button5.Visible = true;
                 label2.Visible = true;
                 textBox4.Visible = true;
+                checkBox4.Visible = true;
             }
         }
 
@@ -478,8 +476,18 @@ namespace DesktopApp1
                 MessageBox.Show("Please select a version");
                 return;
             };
-            f2 = new DownloadDialog(downloadVersion, this, 0);
-            f2.Show();
+            f0 = new DownloadDialog(downloadVersion, this, 0);
+            f0.ShowDialog();
+            
+   
+            ExtractFileDialog f2;
+            f2 = new ExtractFileDialog(Directory.GetCurrentDirectory() + "\\temp\\temp.tgz", Directory.GetCurrentDirectory() + "\\temp\\", this, 0);
+            f2.ShowDialog();
+            ExtractFileDialog f3;
+            f3 = new ExtractFileDialog(Directory.GetCurrentDirectory() + "\\temp\\temp.tar", Directory.GetCurrentDirectory() + "\\Images\\", this, 1);
+            f3.ShowDialog();
+           // MessageBox.Show("asdfasdfasfasf");
+            Directory.Delete(Directory.GetCurrentDirectory() + "\\temp\\", true);
 
         }
 
@@ -487,77 +495,85 @@ namespace DesktopApp1
         {
             getCommands test = new getCommands();
             string[,] commands;
-            //MessageBox.Show(cmdAsync("dir").ToString());
-            commands = test.findCommands(@"C:\latestA2fastboot\jasmine_global_images_V10.0.2.0.PDIMIFJ_9.0\flash_all.bat");
+            if(listBox1.SelectedItem == null)
+            {
+                MessageBox.Show("ERROR! Please select an image from the \"Detected\\Downloaded Images\" list! If your list is empty, please select a version to download and click Download. Alternatively you can place the folder containing the batch files and fastboot images into the \"Images\" folder.");
+                return;
+            }
+            if (listBox2.SelectedItem == null)
+            {
+                MessageBox.Show("ERROR! Please select a batch file to parse!");
+                return;
+            }
+            string path = Properties.Settings.Default.ImagesLocation + listBox1.SelectedItem + "\\" + listBox2.SelectedItem;
+            commands = test.findCommands(path);
             
             int numItems = commands.GetLength(0);
             string fileLocation = @"C:\latestA2fastboot\jasmine_global_images_V10.0.2.0.PDIMIFJ_9.0\images";
-            for (int i = 0; i < numItems; i++)
+            new Thread(() =>
             {
-                string est = @"flash " + commands[i , 1] + " " + fileLocation + "\\" + commands[i, 0];
-                string exitCode = Run.fastboot(est);
-                if (exitCode.Contains("error"))
+                if (!Run.autoFastboot())
                 {
-                    string message = $"An error has ocurred. Would you like to see the ADB output?";
-                    string caption = "Instructions";
-                    MessageBoxButtons buttons = MessageBoxButtons.OKCancel;
-                    buttons = MessageBoxButtons.YesNo;
-                    DialogResult results = new DialogResult();
-                    if (results == DialogResult.Yes)
-                    {
-                        MessageBox.Show(exitCode);
-                    }
                     return;
                 }
-            }
+                for (int i = 0; i < numItems; i++)
+                {
 
-        }
+                    string est = @"flash " + commands[i, 1] + " " + fileLocation + "\\" + commands[i, 0];
 
-        private async void button3_Click_1Async(object sender, EventArgs e)
-        {
-            //string test1 = 
-            //c.addToConsole(Console.Out.ToString());
-            new Thread(() => Run.command("Toolkit.bat", " ")).Start();
+                    string exitCode = Run.fastboot(est);
+
+                    
+                    if (exitCode.Contains("error"))
+                    {
+                        string message = $"An error has ocurred. Would you like to retry? NOTE, it is very common for this to fail for no apparent reason. Before closing, retry a few times.";
+                        string caption = "Instructions";
+                        MessageBoxButtons buttons;
+                        buttons = MessageBoxButtons.YesNo;
+                        DialogResult results = MessageBox.Show(message, caption, buttons);
+                        if (results == DialogResult.Yes)
+                        {
+                            MessageBox.Show(exitCode);
+                        }
+                        return;
+                    }
+                }
+
+            }).Start();
             
-            // Launches TWRP
-            runExternalProcesses P = new runExternalProcesses(this);
-            if (Run.checkExist(comboBox2.Text, ".img") == false)
-            {
-                return;
-            }
-
-
-            Run.autoFastboot();
-            string test;
-            test = Run.fastboot($"boot \"{comboBox2.Text}\"");
-            MessageBox.Show(test);
         }
 
-        private void settings2ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void button3_Click_1(object sender, EventArgs e)
         {
+            if (Run.checkExist(TwrpImage.Text, ".img"))
+            {
+                new Thread(() =>
+                {
+                    if (Run.autoFastboot())
+                    {
+                        string test;
+                        test = Run.fastboot($"boot \"{textBox4.Text}\"");
+                        MessageBox.Show("Command sent!");
+                    }
+                    return;
+                }).Start();
+            }
+            
 
         }
+
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.SaveLocationTwrp = checkBox2.Checked;
-            Properties.Settings.Default.Save();
-        }
-
-        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
-        {
-         //   comboBox2.
-        }
-
-        private void checkBox5_CheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.SaveFlashImg = checkBox5.Checked;
+            Properties.Settings.Default.SaveLocationTwrpLocation = TwrpImage.Text;
             Properties.Settings.Default.Save();
         }
 
         private void checkBox3_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.SaveLocationSideLoadZip = checkBox3.Checked;
+
             Properties.Settings.Default.Save();
         }
 
@@ -567,17 +583,48 @@ namespace DesktopApp1
             Properties.Settings.Default.Save();
         }
 
-        private void toolStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        private void checkBox5_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.SaveFlashImg = checkBox5.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+
+        
+
+        private void pictureBox2_Click(object sender, EventArgs e)
+        {
+            Invoke((Action)(() =>
+            {
+                System.Media.SoundPlayer sp = new System.Media.SoundPlayer(Properties.Resources.oof);
+                sp.Play();
+            }));
+        }
+
+        private void label6_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void pictureBox1_Click(object sender, EventArgs e)
         {
-            Settings settings = new Settings(this);
-            settings.ShowDialog();
+           /* Invoke((Action)(() =>
+            {
+                SoundPlayer s = new SoundPlayer(".\\Programs\\Egg\\oof.wav");
+                s.Play();
+            }));*/
         }
 
+        private void textBox2_TextChanged_1(object sender, EventArgs e)
+        {
+
+        }
+
+
+
+
+
+        //Links
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Process.Start("https://forum.xda-developers.com/mi-a2/development/kernel-hex-t3855773");
@@ -613,29 +660,59 @@ namespace DesktopApp1
             Process.Start("https://t.me/MiA2OffTopic");
         }
 
-        private void pictureBox2_Click(object sender, EventArgs e)
+        //Toolstrip stuff
+
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Invoke((Action)(() =>
-            {
-                System.Media.SoundPlayer sp = new System.Media.SoundPlayer(Properties.Resources.oof);
-                sp.Play();
-            }));
+            Settings settings = new Settings(this);
+            settings.ShowDialog();
         }
 
-        private void label6_Click(object sender, EventArgs e)
+        private void toolStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
 
         }
 
-        private void pictureBox1_Click(object sender, EventArgs e)
+        private void settings2ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-           /* Invoke((Action)(() =>
+
+        }
+
+        private void textBox2_TextChanged_2(object sender, EventArgs e)
+        {
+            if (Properties.Settings.Default.SaveLocationTwrp)
             {
-                SoundPlayer s = new SoundPlayer(".\\Programs\\Egg\\oof.wav");
-                s.Play();
-            }));*/
+
+                Properties.Settings.Default.SaveLocationTwrpLocation = TwrpImage.Text;
+                Properties.Settings.Default.Save();
+                
+            }
+        }
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            listBox2.Items.Clear();
+            //MessageBox.Show( listBox1.SelectedItem.ToString());
+                foreach (String file in Directory.GetFiles(Properties.Settings.Default.ImagesLocation + "\\" + listBox1.SelectedItem))
+                {
+                string[] tem = file.Split('.');
+                if (tem[tem.Length - 1].Contains("bat")){
+                    string[] tem2 = file.Split('\\');
+                    listBox2.Items.Add(tem2[tem2.Length - 1]);
+                }
+                //listBox2.Items.Add(file);
+                }
+                
+
+            
+        }
+
+        private void listBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
+
 }
 
 

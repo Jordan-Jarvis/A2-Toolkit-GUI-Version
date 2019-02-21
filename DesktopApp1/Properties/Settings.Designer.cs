@@ -238,5 +238,29 @@ namespace DesktopApp1.Properties {
                 this["ShowConsole"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("default")]
+        public string ImagesLocation {
+            get {
+                return ((string)(this["ImagesLocation"]));
+            }
+            set {
+                this["ImagesLocation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ImagesLocationIsCustom {
+            get {
+                return ((bool)(this["ImagesLocationIsCustom"]));
+            }
+            set {
+                this["ImagesLocationIsCustom"] = value;
+            }
+        }
     }
 }

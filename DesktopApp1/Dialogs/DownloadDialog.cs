@@ -18,12 +18,46 @@ namespace DesktopApp1
         string downloadLink;
         StartPage Start;
         int canceled = 0;
+        private int action;
+        private DownloadDialog f1;
+
         public DownloadDialog(string downloadVersion, StartPage Start, int action)
         {
+            this.action = action;
             this.Start = Start;
             downloadLink = downloadVersion;
             InitializeComponent();
-            label1_Click(sender, e);
+            if (action == 0)
+            {
+                label1_Click(sender, e);
+                
+            }
+            else if(action == 1)
+            {
+
+                MessageBox.Show("The extraction can take a long time depending on your computer, please be patient. There is no loading bar, but if something goes wrong, I'll let you know.");
+                progressBar1.Value = 30;
+                lblStatus.Text = "EXTRACTING.... PLEASE WAIT! \n The extraction can take a long time.";
+                ShowDialog();
+                new Thread(() => ExtractFile(Directory.GetCurrentDirectory() + "\\temp\\temp.tar", Directory.GetCurrentDirectory() + "\\temp\\"));
+                    //ExtractFile(Directory.GetCurrentDirectory() + "\\temp\\temp.tar", Directory.GetCurrentDirectory() + "\\temp\\");
+            }
+            else if(action == 2)
+            {
+               
+                progressBar1.Value = 70;
+                lblStatus.Text = "EXTRACTING.... PLEASE WAIT!";
+                new Thread(() =>
+                {
+                    Elength = 0;
+                    ExtractFile(Directory.GetCurrentDirectory() + "\\temp\\temp.tar", Directory.GetCurrentDirectory() + "\\Images\\");
+                    
+                }).Start();
+            }
+            else
+            {
+                MessageBox.Show("This option has not been implimented, did you mean 2?");
+            }
             
             
         }
@@ -65,7 +99,7 @@ namespace DesktopApp1
 
             string program = " \"" + Directory.GetCurrentDirectory() + Properties.Settings.Default.Files + "7z\\7za.exe\" ";
             string arguments = ("x \"" + sourceArchive + "\" -aoa -o\"" + destination + "\"");
-            // MessageBox.Show(program);
+            MessageBox.Show(program);
             // MessageBox.Show(arguments);
             Directory.CreateDirectory(destination);
             long Clength = 1;
@@ -116,8 +150,11 @@ namespace DesktopApp1
 
             
             process.WaitForExit();
-            Invoke((Action)(() => Close()));
-
+            this.Invoke((MethodInvoker)delegate
+            {
+                // close the form on the forms thread
+                this.Close();
+            });
         }
 
         void CaptureOutput(object sender, DataReceivedEventArgs e)
@@ -125,8 +162,7 @@ namespace DesktopApp1
             string Output;
             if (e.Data != null)
             {
-                progressBar1.Invoke((Action)(() => progressBar1.Value = 50));
-                lblStatus.Invoke((Action)(() => lblStatus.Text = "EXTRACTING.... PLEASE WAIT!"));
+                
                 Start.Run.ShowOutput(e.Data, ConsoleColor.Green);
                 Start.c.addToConsole(e.Data.ToString() + "\n");
                 Output = e.Data.ToString();
@@ -148,10 +184,13 @@ namespace DesktopApp1
 
         private void Form2_Load(object sender, EventArgs e)
         {
-            
-            client = new WebClient();
-            client.DownloadProgressChanged += Client_DownloadProgressChanged;
-            client.DownloadFileCompleted += Client_DownloadFileCompleted;
+            if(action == 0)
+            {
+                client = new WebClient();
+                client.DownloadProgressChanged += Client_DownloadProgressChanged;
+                client.DownloadFileCompleted += Client_DownloadFileCompleted;
+            }
+
 
         }
 
@@ -163,14 +202,22 @@ namespace DesktopApp1
             }
             else
             {
-                MessageBox.Show("The extraction can take a long time depending on your computer, please be patient. There is no loading bar, but if something goes wrong, I'll let you know.");
-                ExtractFile(Directory.GetCurrentDirectory() + "\\temp\\temp.tgz", Directory.GetCurrentDirectory() + "\\temp\\");
-                //File.Delete(Directory.GetCurrentDirectory() + "\\temp\\temp.tgz");
-                Elength = 0;
-                ExtractFile(Directory.GetCurrentDirectory() + "\\temp\\temp.tar", Directory.GetCurrentDirectory() + "\\Images\\");
-                //File.Delete(Directory.GetCurrentDirectory() + "\\temp\\temp.tar");
-                Directory.Delete(Directory.GetCurrentDirectory() + "\\temp\\", true);
+                
+                if (client != null)
+                {
+                    canceled = 1;
+                    client.CancelAsync();
+                }
+                
             }
+            this.Invoke((MethodInvoker)delegate
+                {
+                    // close the form on the forms thread
+                    this.Close();
+                });
+
+
+            
 
             
             //catch { return; }

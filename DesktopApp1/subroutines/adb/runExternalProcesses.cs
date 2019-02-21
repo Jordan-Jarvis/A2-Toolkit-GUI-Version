@@ -64,20 +64,42 @@ namespace DesktopApp1.subroutines.adb
         }
         public int InstallZip()
         {
-            if (checkExist(location: Start.textBox3.Text, extension: ".zip") == false)
+            if (!autoFastboot())
             {
                 return 0;
             }
-            autoFastboot();
-            fastboot($"boot \"{Start.textBox3.Text}\"");
-            if (checkExist(Start.textBox4.Text, ".img") == false)
+            string message;
+            if (checkExist(Start.textBox3.Text, ".zip") == false)
             {
                 return 0;
+            }
+            if (!Properties.Settings.Default.TwrpInstalled)
+            {
+                message = $"Booting TWRP, Once it starts please unlock and select Advanced>Sideload then swipe to start sideload then click OK";
+                if (checkExist(Start.textBox4.Text, ".img") == false)
+                {
+                    
+
+
+
+                    DialogResult results = MessageBox.Show("Warning, the file selected is not in the typical .img format, are you sure you want to continue?", "Warning", MessageBoxButtons.OKCancel);
+                    if (results == DialogResult.Cancel)
+                    {
+                        return 0;
+                    }
+                    
+                }
+                fastboot($"boot \"{Start.textBox4.Text}\"");
+                
+            }
+            else
+            {
+                message = ("Please enter TWRP now. Once it starts please unlock and select Advanced>Sideload then swipe to start sideload then click OK");
             }
             //autoFastboot();
             // fastboot($"boot {textBox3.Text}");
 
-            string message = $"Booting TWRP, Once it starts please unlock and select Advanced>Sideload then swipe to start sideload and click OK";
+            
             string caption = "Instructions";
             MessageBoxButtons buttons = MessageBoxButtons.OKCancel;
             DialogResult result = new DialogResult();
@@ -86,23 +108,26 @@ namespace DesktopApp1.subroutines.adb
                 return 0;
             }
             string zipResult = "failed";
-            while (zipResult.Contains("failed") || zipResult.Length > 5)
+            int i = 0;
+            while (i < 1)
             {
 
                 //System.Threading.Thread.Sleep(15000);
                 zipResult = adb($"sideload \"{Start.textBox3.Text}\"");
-                Console.WriteLine(zipResult);
-                if (zipResult.Contains("error"))
+                if (zipResult.Contains("failed"))
                 {
-                    message = $"An error has ocurred. Would you like to see the ADB output?";
+                    message = $"An error has ocurred while sideloading. Would you like to retry?";
                     caption = "Instructions";
                     buttons = MessageBoxButtons.YesNo;
                     DialogResult results = new DialogResult();
                     if (results == DialogResult.Yes)
                     {
-                        MessageBox.Show(zipResult);
+                        i = 0;
                     }
-                    return 1;
+                    else
+                    {
+                        i = 1;
+                    }
                 }
             }
 
@@ -187,6 +212,7 @@ namespace DesktopApp1.subroutines.adb
             }
             else
             {
+                Start.c.addToConsole( "\n");
                 return;
             }
             
