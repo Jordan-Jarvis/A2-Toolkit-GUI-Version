@@ -17,6 +17,7 @@ namespace DesktopApp1
 {
     public partial class StartPage : Form
     {
+        
         public ConsoleDisplay c;
         int hasSelectedSoftwareVersion = 0;
         public string downloadVersion;
@@ -28,6 +29,12 @@ namespace DesktopApp1
 
         public StartPage()
         {
+            if (!Directory.Exists(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\Programs\\"))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\Programs\\");
+                //downloadDependencies();
+                // Download dependencies function!!!
+            }
             //if(Properties.Settings.Default.ImagesLocation.Contains("default") && !Properties.Settings.Default.ImagesLocationIsCustom)
             {
                 Properties.Settings.Default.ImagesLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\Images\\";
@@ -71,6 +78,10 @@ namespace DesktopApp1
 
             //get list items from saved location
             Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            if (!Directory.Exists(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\Images\\"))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\Images\\");
+            }
             string[] temp = Directory.GetDirectories(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\Images\\");
 
             for(int r = 0; r < temp.Length; r++ )
@@ -107,7 +118,16 @@ namespace DesktopApp1
             new Thread(() => jarvisBlink()).Start();
         }
 
-
+        private bool downloadDependencies()
+        {
+            DownloadDialog d;
+            d = new DownloadDialog("https://github.com/da-ha3ker/Jarvinator-A2-Toolkit-Dependencies/archive/master.zip", this, 1);
+            d.ShowDialog();
+            ExtractFileDialog e;
+            e = new ExtractFileDialog(Directory.GetCurrentDirectory() + "\\temp\\temp.zip", Directory.GetCurrentDirectory() + "\\Programs\\", this, 0);
+            e.ShowDialog();
+            return true;
+        }
         private void jarvisBlink()
         {
             while (!this.IsHandleCreated)
@@ -469,6 +489,7 @@ namespace DesktopApp1
 
         private void button6_Click(object sender, EventArgs e)
         {
+
             var item2 = comboBox1.SelectedItem;
             MyType ter = (MyType)item2;
             try { downloadVersion = ter.link; }
@@ -476,6 +497,15 @@ namespace DesktopApp1
                 MessageBox.Show("Please select a version");
                 return;
             };
+            string message = $"This will download roughly 2GB and take around 3-4 GB once extracted. Please ensure your computer has at least 8GB free space during the extraction process. Are you sure you want to continue?";
+            string caption = "Instructions";
+            MessageBoxButtons buttons;
+            buttons = MessageBoxButtons.YesNo;
+            DialogResult results = MessageBox.Show(message, caption, buttons);
+            if (results == DialogResult.No)
+            {
+                return;
+            }
             f0 = new DownloadDialog(downloadVersion, this, 0);
             f0.ShowDialog();
             
@@ -533,9 +563,13 @@ namespace DesktopApp1
                         DialogResult results = MessageBox.Show(message, caption, buttons);
                         if (results == DialogResult.Yes)
                         {
-                            MessageBox.Show(exitCode);
+                            i--;
                         }
-                        return;
+                        else
+                        {
+                            return;
+                        }
+                        
                     }
                 }
 

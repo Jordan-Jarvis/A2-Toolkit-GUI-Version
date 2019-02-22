@@ -35,24 +35,12 @@ namespace DesktopApp1
             else if(action == 1)
             {
 
-                MessageBox.Show("The extraction can take a long time depending on your computer, please be patient. There is no loading bar, but if something goes wrong, I'll let you know.");
-                progressBar1.Value = 30;
-                lblStatus.Text = "EXTRACTING.... PLEASE WAIT! \n The extraction can take a long time.";
-                ShowDialog();
-                new Thread(() => ExtractFile(Directory.GetCurrentDirectory() + "\\temp\\temp.tar", Directory.GetCurrentDirectory() + "\\temp\\"));
-                    //ExtractFile(Directory.GetCurrentDirectory() + "\\temp\\temp.tar", Directory.GetCurrentDirectory() + "\\temp\\");
+                label1_Click(sender, e);
             }
             else if(action == 2)
             {
-               
-                progressBar1.Value = 70;
-                lblStatus.Text = "EXTRACTING.... PLEASE WAIT!";
-                new Thread(() =>
-                {
-                    Elength = 0;
-                    ExtractFile(Directory.GetCurrentDirectory() + "\\temp\\temp.tar", Directory.GetCurrentDirectory() + "\\Images\\");
-                    
-                }).Start();
+
+                label1_Click(sender, e);
             }
             else
             {
@@ -71,13 +59,22 @@ namespace DesktopApp1
            // ExtractFile(Directory.GetCurrentDirectory() + "\\temp\\temp.tgz", Directory.GetCurrentDirectory() + "\\temp\\");
 
             string url = downloadLink;
+            string extension;
+            if (action == 1)
+            {
+                extension = ".zip";
+            }
+            else
+            {
+                extension = ".tgz";
+            }
             if (!string.IsNullOrEmpty(url))
             {
                 Thread thread = new Thread(() =>
                 {
                     Uri uri = new Uri(url);
                     string pathString = Directory.GetCurrentDirectory() + "\\temp\\";
-                    string fileName = "temp.tgz";
+                    string fileName = "temp" + extension;
                     Directory.CreateDirectory(pathString);
                     System.Console.WriteLine(pathString + fileName);
                     while(client == null)
