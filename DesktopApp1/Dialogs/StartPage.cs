@@ -90,7 +90,22 @@ namespace DesktopApp1
 
                 listBox1.Items.Add(tem[tem.Length - 1]);
             }
+            if (!Directory.Exists(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\backups\\"))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\backups\\");
+            }
+            string[] tempt = Directory.GetFiles(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\backups\\");
+            string temporary = null;
+            for (int r = 0; r < tempt.Length; r++ )
+            {
+                string[] tempr = null;
+                string[] tem1 = tempt[r].Split('\\' , '.');
+                    listBox3.Items.Add(tem1[tem1.Length - 2]);
+            }
+
+                
             
+
 
 
 
@@ -742,6 +757,57 @@ namespace DesktopApp1
         }
 
         private void listBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void listBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button2_Click_2(object sender, EventArgs e)
+        {
+            if (textBox2.Text.ToString().Contains("Enter a name for your backup here"))
+            {
+                MessageBox.Show("Please enter a name for your backup");
+                return;
+            }
+            string message = "Are you sure you want to run the backup now?";
+            string caption = "Hello";
+            MessageBoxButtons buttons;
+            buttons = MessageBoxButtons.YesNo;
+            DialogResult results = MessageBox.Show(message, caption, buttons);
+            if (results == DialogResult.No)
+            {
+                return;
+            }
+            new Thread(() =>
+            {
+                if (!Directory.Exists(Directory.GetCurrentDirectory() + "\\backups\\"))
+                {
+                    Directory.CreateDirectory(Directory.GetCurrentDirectory() + "\\backups\\");
+                }
+                string temp; 
+
+                if (run.adb("devices").Contains("no devices"))
+                {
+                    MessageBox.Show("No device detected! Please ensure it is plugged in, has debugging enabled and your pc has the proper drivers!");
+                    return;
+                }
+                new Thread(() => MessageBox.Show("Please unlock your phone and follow the instructions from there.")).Start();
+                temp = run.adb(" backup -apk -shared -all -f \"" + Directory.GetCurrentDirectory() + "\\backups\\" + textBox2.Text + ".ab\"");
+                if (temp.Contains("error"))
+                {
+                    MessageBox.Show("An error occured, please check the console to see the ADB output.");
+                    return;
+                }
+                
+            }).Start();
+            
+        }
+
+        private void textBox2_TextChanged_3(object sender, EventArgs e)
         {
 
         }

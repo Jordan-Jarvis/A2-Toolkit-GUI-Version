@@ -902,6 +902,12 @@ the Jarvinator Toolkit Group. Help me buy a Mi 6X? Donate to
         JUYRqsKeeeXk/wORo7vneJMmAAAAAABJRU5ErkJggg==
 </value>
   </data>
+  <data name="label7.Text" xml:space="preserve">
+    <value>Please DO NOT use this as your only backup.
+ It will only back up apps and app-data. it does not back up everything on your phone.
+If you have root, Use titanium backup instead, it is far superior to the ADB backup and 
+restore (which is what this uses).</value>
+  </data>
   <metadata name="menuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>262, 17</value>
   </metadata>
