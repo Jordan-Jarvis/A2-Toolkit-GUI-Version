@@ -75,6 +75,16 @@ namespace DesktopApp1
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.button12 = new System.Windows.Forms.Button();
+            this.button13 = new System.Windows.Forms.Button();
+            this.button14 = new System.Windows.Forms.Button();
+            this.button15 = new System.Windows.Forms.Button();
+            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.button11 = new System.Windows.Forms.Button();
+            this.button10 = new System.Windows.Forms.Button();
+            this.button9 = new System.Windows.Forms.Button();
+            this.button8 = new System.Windows.Forms.Button();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.label6 = new System.Windows.Forms.Label();
@@ -95,16 +105,6 @@ namespace DesktopApp1
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.donateToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.groupBox8 = new System.Windows.Forms.GroupBox();
-            this.button8 = new System.Windows.Forms.Button();
-            this.button9 = new System.Windows.Forms.Button();
-            this.button10 = new System.Windows.Forms.Button();
-            this.button11 = new System.Windows.Forms.Button();
-            this.groupBox9 = new System.Windows.Forms.GroupBox();
-            this.button12 = new System.Windows.Forms.Button();
-            this.button13 = new System.Windows.Forms.Button();
-            this.button14 = new System.Windows.Forms.Button();
-            this.button15 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -117,12 +117,12 @@ namespace DesktopApp1
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.tabPage2.SuspendLayout();
+            this.groupBox9.SuspendLayout();
+            this.groupBox8.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.tabPage5.SuspendLayout();
             this.menuStrip1.SuspendLayout();
-            this.groupBox8.SuspendLayout();
-            this.groupBox9.SuspendLayout();
             this.SuspendLayout();
             // 
             // reboot
@@ -684,6 +684,114 @@ namespace DesktopApp1
             this.tabPage2.Text = "General";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // groupBox9
+            // 
+            this.groupBox9.BackColor = System.Drawing.Color.DarkViolet;
+            this.groupBox9.Controls.Add(this.button12);
+            this.groupBox9.Controls.Add(this.button13);
+            this.groupBox9.Controls.Add(this.button14);
+            this.groupBox9.Controls.Add(this.button15);
+            this.groupBox9.Location = new System.Drawing.Point(147, 6);
+            this.groupBox9.Name = "groupBox9";
+            this.groupBox9.Size = new System.Drawing.Size(125, 222);
+            this.groupBox9.TabIndex = 17;
+            this.groupBox9.TabStop = false;
+            this.groupBox9.Text = "Other tweaks";
+            // 
+            // button12
+            // 
+            this.button12.Enabled = false;
+            this.button12.Location = new System.Drawing.Point(7, 110);
+            this.button12.Name = "button12";
+            this.button12.Size = new System.Drawing.Size(111, 23);
+            this.button12.TabIndex = 3;
+            this.button12.Text = "Install HEX Kernel";
+            this.button12.UseVisualStyleBackColor = true;
+            // 
+            // button13
+            // 
+            this.button13.Enabled = false;
+            this.button13.Location = new System.Drawing.Point(7, 80);
+            this.button13.Name = "button13";
+            this.button13.Size = new System.Drawing.Size(111, 23);
+            this.button13.TabIndex = 2;
+            this.button13.Text = "Custom Boot Splash";
+            this.button13.UseVisualStyleBackColor = true;
+            // 
+            // button14
+            // 
+            this.button14.Enabled = false;
+            this.button14.Location = new System.Drawing.Point(7, 50);
+            this.button14.Name = "button14";
+            this.button14.Size = new System.Drawing.Size(111, 23);
+            this.button14.TabIndex = 1;
+            this.button14.Text = "Revert to A2";
+            this.button14.UseVisualStyleBackColor = true;
+            // 
+            // button15
+            // 
+            this.button15.Enabled = false;
+            this.button15.Location = new System.Drawing.Point(7, 20);
+            this.button15.Name = "button15";
+            this.button15.Size = new System.Drawing.Size(111, 23);
+            this.button15.TabIndex = 0;
+            this.button15.Text = "Convert to 6X";
+            this.button15.UseVisualStyleBackColor = true;
+            // 
+            // groupBox8
+            // 
+            this.groupBox8.BackColor = System.Drawing.Color.DarkTurquoise;
+            this.groupBox8.Controls.Add(this.button11);
+            this.groupBox8.Controls.Add(this.button10);
+            this.groupBox8.Controls.Add(this.button9);
+            this.groupBox8.Controls.Add(this.button8);
+            this.groupBox8.Location = new System.Drawing.Point(7, 6);
+            this.groupBox8.Name = "groupBox8";
+            this.groupBox8.Size = new System.Drawing.Size(134, 222);
+            this.groupBox8.TabIndex = 16;
+            this.groupBox8.TabStop = false;
+            this.groupBox8.Text = "Root/Unroot";
+            // 
+            // button11
+            // 
+            this.button11.Enabled = false;
+            this.button11.Location = new System.Drawing.Point(7, 110);
+            this.button11.Name = "button11";
+            this.button11.Size = new System.Drawing.Size(111, 23);
+            this.button11.TabIndex = 3;
+            this.button11.Text = "Restore Boot.img";
+            this.button11.UseVisualStyleBackColor = true;
+            // 
+            // button10
+            // 
+            this.button10.Enabled = false;
+            this.button10.Location = new System.Drawing.Point(7, 80);
+            this.button10.Name = "button10";
+            this.button10.Size = new System.Drawing.Size(111, 23);
+            this.button10.TabIndex = 2;
+            this.button10.Text = "Backup Boot.img";
+            this.button10.UseVisualStyleBackColor = true;
+            // 
+            // button9
+            // 
+            this.button9.Enabled = false;
+            this.button9.Location = new System.Drawing.Point(7, 50);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(111, 23);
+            this.button9.TabIndex = 1;
+            this.button9.Text = "Unroot";
+            this.button9.UseVisualStyleBackColor = true;
+            // 
+            // button8
+            // 
+            this.button8.Enabled = false;
+            this.button8.Location = new System.Drawing.Point(7, 20);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(111, 23);
+            this.button8.TabIndex = 0;
+            this.button8.Text = "Root";
+            this.button8.UseVisualStyleBackColor = true;
+            // 
             // tabPage1
             // 
             this.tabPage1.Controls.Add(this.groupBox4);
@@ -882,106 +990,6 @@ namespace DesktopApp1
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             // 
-            // groupBox8
-            // 
-            this.groupBox8.BackColor = System.Drawing.Color.DarkTurquoise;
-            this.groupBox8.Controls.Add(this.button11);
-            this.groupBox8.Controls.Add(this.button10);
-            this.groupBox8.Controls.Add(this.button9);
-            this.groupBox8.Controls.Add(this.button8);
-            this.groupBox8.Location = new System.Drawing.Point(7, 6);
-            this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(134, 222);
-            this.groupBox8.TabIndex = 16;
-            this.groupBox8.TabStop = false;
-            this.groupBox8.Text = "Root/Unroot";
-            // 
-            // button8
-            // 
-            this.button8.Location = new System.Drawing.Point(7, 20);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(111, 23);
-            this.button8.TabIndex = 0;
-            this.button8.Text = "Root";
-            this.button8.UseVisualStyleBackColor = true;
-            // 
-            // button9
-            // 
-            this.button9.Location = new System.Drawing.Point(7, 50);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(111, 23);
-            this.button9.TabIndex = 1;
-            this.button9.Text = "Unroot";
-            this.button9.UseVisualStyleBackColor = true;
-            // 
-            // button10
-            // 
-            this.button10.Location = new System.Drawing.Point(7, 80);
-            this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(111, 23);
-            this.button10.TabIndex = 2;
-            this.button10.Text = "Backup Boot.img";
-            this.button10.UseVisualStyleBackColor = true;
-            // 
-            // button11
-            // 
-            this.button11.Location = new System.Drawing.Point(7, 110);
-            this.button11.Name = "button11";
-            this.button11.Size = new System.Drawing.Size(111, 23);
-            this.button11.TabIndex = 3;
-            this.button11.Text = "Restore Boot.img";
-            this.button11.UseVisualStyleBackColor = true;
-            // 
-            // groupBox9
-            // 
-            this.groupBox9.BackColor = System.Drawing.Color.DarkViolet;
-            this.groupBox9.Controls.Add(this.button12);
-            this.groupBox9.Controls.Add(this.button13);
-            this.groupBox9.Controls.Add(this.button14);
-            this.groupBox9.Controls.Add(this.button15);
-            this.groupBox9.Location = new System.Drawing.Point(147, 6);
-            this.groupBox9.Name = "groupBox9";
-            this.groupBox9.Size = new System.Drawing.Size(125, 222);
-            this.groupBox9.TabIndex = 17;
-            this.groupBox9.TabStop = false;
-            this.groupBox9.Text = "Other tweaks";
-            // 
-            // button12
-            // 
-            this.button12.Location = new System.Drawing.Point(7, 110);
-            this.button12.Name = "button12";
-            this.button12.Size = new System.Drawing.Size(111, 23);
-            this.button12.TabIndex = 3;
-            this.button12.Text = "Install HEX Kernel";
-            this.button12.UseVisualStyleBackColor = true;
-            // 
-            // button13
-            // 
-            this.button13.Location = new System.Drawing.Point(7, 80);
-            this.button13.Name = "button13";
-            this.button13.Size = new System.Drawing.Size(111, 23);
-            this.button13.TabIndex = 2;
-            this.button13.Text = "Custom Boot Splash";
-            this.button13.UseVisualStyleBackColor = true;
-            // 
-            // button14
-            // 
-            this.button14.Location = new System.Drawing.Point(7, 50);
-            this.button14.Name = "button14";
-            this.button14.Size = new System.Drawing.Size(111, 23);
-            this.button14.TabIndex = 1;
-            this.button14.Text = "Revert to A2";
-            this.button14.UseVisualStyleBackColor = true;
-            // 
-            // button15
-            // 
-            this.button15.Location = new System.Drawing.Point(7, 20);
-            this.button15.Name = "button15";
-            this.button15.Size = new System.Drawing.Size(111, 23);
-            this.button15.TabIndex = 0;
-            this.button15.Text = "Convert to 6X";
-            this.button15.UseVisualStyleBackColor = true;
-            // 
             // StartPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1013,6 +1021,8 @@ namespace DesktopApp1
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.tabPage2.ResumeLayout(false);
+            this.groupBox9.ResumeLayout(false);
+            this.groupBox8.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
@@ -1020,8 +1030,6 @@ namespace DesktopApp1
             this.tabPage5.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            this.groupBox8.ResumeLayout(false);
-            this.groupBox9.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

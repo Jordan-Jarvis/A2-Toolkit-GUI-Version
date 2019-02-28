@@ -71,7 +71,8 @@ namespace DesktopApp1.subroutines.adb
             }
             if (!Properties.Settings.Default.TwrpInstalled)
             {
-                MessageBox.Show("Booting TWRP, Once it starts please unlock and select Advanced>Sideload then swipe to start sideload then click OK");
+                message = ("Once TWRP starts please unlock and select Advanced>Sideload then swipe to start sideload THEN click OK");
+
                 if (checkExist(Start.textBox4.Text, ".img") == false)
                 {
                     
@@ -92,10 +93,9 @@ namespace DesktopApp1.subroutines.adb
             {
                 message = ("Please enter TWRP now. Once it starts please unlock and select Advanced>Sideload then swipe to start sideload then click OK");
             }
-            //autoFastboot();
-            // fastboot($"boot {textBox3.Text}");
 
-            message = ("Please enter TWRP now. Once it starts please unlock and select Advanced>Sideload then swipe to start sideload then click OK");
+
+            
             string caption = "Instructions";
             MessageBoxButtons buttons = MessageBoxButtons.OKCancel;
             DialogResult result = MessageBox.Show(message, caption, buttons);

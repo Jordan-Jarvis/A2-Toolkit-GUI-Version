@@ -53,14 +53,15 @@ namespace DesktopApp1
             }
             if (Properties.Settings.Default.SaveLocationZipFileTwrp)
             {
-                checkBox4.Checked = true;
-                textBox4.Text = Properties.Settings.Default.SaveLocationZipFileTwrpLocation;
                 
+                textBox4.Text = Properties.Settings.Default.SaveLocationZipFileTwrpLocation;
+                checkBox4.Checked = true;
             }
             if (Properties.Settings.Default.SaveLocationSideLoadZip)
             {
-                checkBox3.Checked = true;
+                
                 textBox3.Text = Properties.Settings.Default.SaveLocationSideLoadZipLocation;
+                checkBox3.Checked = true;
             }
             if (Properties.Settings.Default.SaveLocationTwrp)
             {
