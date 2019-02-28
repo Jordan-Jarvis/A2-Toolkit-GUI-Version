@@ -64,10 +64,6 @@ namespace DesktopApp1.subroutines.adb
         }
         public int InstallZip()
         {
-            if (!autoFastboot())
-            {
-                return 0;
-            }
             string message;
             if (checkExist(Start.textBox3.Text, ".zip") == false)
             {
@@ -75,7 +71,7 @@ namespace DesktopApp1.subroutines.adb
             }
             if (!Properties.Settings.Default.TwrpInstalled)
             {
-                message = $"Booting TWRP, Once it starts please unlock and select Advanced>Sideload then swipe to start sideload then click OK";
+                MessageBox.Show("Booting TWRP, Once it starts please unlock and select Advanced>Sideload then swipe to start sideload then click OK");
                 if (checkExist(Start.textBox4.Text, ".img") == false)
                 {
                     
@@ -89,7 +85,7 @@ namespace DesktopApp1.subroutines.adb
                     }
                     
                 }
-                fastboot($"boot \"{Start.textBox4.Text}\"");
+                new Thread(() => fastboot($"boot \"{Start.textBox4.Text}\"")).Start();
                 
             }
             else
@@ -99,10 +95,10 @@ namespace DesktopApp1.subroutines.adb
             //autoFastboot();
             // fastboot($"boot {textBox3.Text}");
 
-            
+            message = ("Please enter TWRP now. Once it starts please unlock and select Advanced>Sideload then swipe to start sideload then click OK");
             string caption = "Instructions";
             MessageBoxButtons buttons = MessageBoxButtons.OKCancel;
-            DialogResult result = new DialogResult();
+            DialogResult result = MessageBox.Show(message, caption, buttons);
             if (result == DialogResult.Cancel)
             {
                 return 0;
@@ -112,7 +108,7 @@ namespace DesktopApp1.subroutines.adb
             while (i < 1)
             {
 
-                //System.Threading.Thread.Sleep(15000);
+                System.Threading.Thread.Sleep(15000);
                 zipResult = adb($"sideload \"{Start.textBox3.Text}\"");
                 if (zipResult.Contains("failed"))
                 {
@@ -143,7 +139,7 @@ namespace DesktopApp1.subroutines.adb
                 process.Kill();
             }
 
-            new Thread(() => fastboot("devices")).Start();
+            isDevice = fastboot("devices");
             if (string.IsNullOrEmpty(isDevice) || string.IsNullOrWhiteSpace(isDevice))
             {
                 string devices = adb("devices -l");

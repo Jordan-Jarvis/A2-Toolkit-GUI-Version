@@ -183,7 +183,14 @@ namespace DesktopApp1
 
         private void button2_Click(object sender, EventArgs e)
         {
-            new Thread(() => Run.InstallZip()).Start();
+            new Thread(() =>
+            {
+                if (Run.autoFastboot())
+                {
+                    Run.InstallZip();
+                }
+            }).Start();
+        
         }
 
         private void button1_Click_1(object sender, EventArgs e)
@@ -204,22 +211,30 @@ namespace DesktopApp1
             {
                 string temp;
                 temp = Run.adb("reboot bootloader");
-                if (temp.Contains("error"))
+                if (temp != null)
+                {
+                    if (temp.Contains("error"))
                     {
-                    if (temp.Contains("no devices"))
-                    {
-                        MessageBox.Show("An error occured, the device was not detected. Please ensure it is plugged in with debug enabled and the drivers are up to date.");
+                        if (temp.Contains("no devices"))
+                        {
+                            MessageBox.Show("An error occured, the device was not detected. Please ensure it is plugged in with debug enabled and the drivers are up to date.");
+                        }
+                        else
+                        {
+                            MessageBox.Show("An unknown error occured, please check the console output for more info.");
+                        }
+
                     }
                     else
                     {
-                        MessageBox.Show("An unknown error occured, please check the console output for more info.");
+                        MessageBox.Show("Command sent successfully.");
                     }
-                    
                 }
                 else
                 {
                     MessageBox.Show("Command sent successfully.");
                 }
+                
             
             }).Start();
         }
@@ -336,8 +351,8 @@ namespace DesktopApp1
         private bool flashImg(string currentPartition, string filePath)
         {
             string output;
-            MessageBox.Show($"flash {currentPartition} {filePath}");
-                output = Run.fastboot("flash {currentPartition} {filePath}");
+            
+                output = Run.fastboot("flash " + currentPartition + " \"" +  filePath + "\"");
             if (output.Contains("error"))
             {
                 return false;
@@ -349,58 +364,65 @@ namespace DesktopApp1
         {
             // THIS IS THE FLASH FUNCTION!!!
             List<string> partitions = new List<String>();
-            if (checkedListBox1.CheckedItems.Count != 0)
+            new Thread(() =>
             {
-                // If so, loop through all checked items and print results.  
-               // string s = "";
-                for (int x = 0; x < checkedListBox1.CheckedItems.Count; x++)
+                if (checkedListBox1.CheckedItems.Count != 0)
                 {
-                    partitions.Add(checkedListBox1.CheckedItems[x].ToString());
-                }
-                
-            }
-            else
-            {
-                MessageBox.Show("Error, Please select at least one partition to flash!");
-                return;
-            }
-
-            if (Run.checkExist(textBox1.Text, ".img") == false)
-            {
-                return;
-            }
-            Run.autoFastboot();
-            //string currentPartition;
-            for (int i = 0; i < partitions.Count; i++)
-            {
-                if (flashImg(partitions[i], textBox1.Text) == true)
-                {
+                    // If so, loop through all checked items and print results.  
+                    // string s = "";
+                    for (int x = 0; x < checkedListBox1.CheckedItems.Count; x++)
+                    {
+                        partitions.Add(checkedListBox1.CheckedItems[x].ToString());
+                    }
 
                 }
                 else
                 {
-                    
-                    string message = $"flashing the {partitions[i]} failed.";
-                    //string caption = "Error!";
-                   // MessageBoxButtons buttons = MessageBoxButtons.AbortRetryIgnore;
-                    DialogResult result = new DialogResult();
+                    MessageBox.Show("Error, Please select at least one partition to flash!");
+                    return;
+                }
 
-                    if (result == DialogResult.Retry)
+                if (Run.checkExist(textBox1.Text, ".img") == false)
+                {
+                    return;
+                }
+                Run.autoFastboot();
+                //string currentPartition;
+                for (int i = 0; i < partitions.Count; i++)
+                {
+                    if (flashImg(partitions[i], textBox1.Text) == true)
                     {
-                        i--;
+
                     }
-                    else if(result == DialogResult.Abort)
+                    else
                     {
-                        return;
+
+                        string message = $"flashing the {partitions[i]} failed.";
+                        //string caption = "Error!";
+                        // MessageBoxButtons buttons = MessageBoxButtons.AbortRetryIgnore;
+                        DialogResult result = new DialogResult();
+
+                        if (result == DialogResult.Retry)
+                        {
+                            i--;
+                        }
+                        else if (result == DialogResult.Abort)
+                        {
+                            return;
+                        }
                     }
                 }
-            }
+                Run.fastboot("reboot");
+            }).Start();
+
+
+        }
             
 
 
             //partitions.Add(checkedListBox1.)
 
-        }
+        
 
         
         private void groupBox4_Enter(object sender, EventArgs e)
@@ -538,6 +560,7 @@ namespace DesktopApp1
 
         private void button7_Click(object sender, EventArgs e)
         {
+        
             getCommands test = new getCommands();
             string[,] commands;
             if(listBox1.SelectedItem == null)
