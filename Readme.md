@@ -1,1 +1,2 @@
-This is the A2 toolkit source
+This is the A2 toolkit source, it was my first C# program and was written in my first year of college. As such, it has very poor design patterns. I decided to make the source public anyways. Maybe someone on XDA can port this to other phone models. Unfortunately I am working on other projects and my current phone does not have the ability to be unlocked or rooted so I have no way to test if it works.
+[Click here for the latest release](https://github.com/Jordan-Jarvis/Jarvinator-A2-Toolkit-Release)
